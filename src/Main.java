@@ -34,13 +34,26 @@ public class Main extends Application{
 
     public static void main(String[] args) {
 
-        Permutation perm = new Permutation(1,2,3);
-        System.out.println(perm.getFactoradic());
-        perm = new Permutation(2,1,3);
-        System.out.println(perm.getFactoradic());
+        //System.out.println(new Permutation(1,2,3));
+        //System.out.println(new Permutation(1,3,2));
+        //System.out.println(new Permutation(2,1,3));
+        //System.out.println(new Permutation(2,3,1));
+        //System.out.println(new Permutation(3,1,2));
+        //System.out.println(new Permutation(3,2,1));
+
+        int[] data = {5,9,1,8,2,6,4,7,3};
+        Permutation perm = new Permutation(data);
+        int[] inv = perm.getLehmerCode();
+        int fact = perm.getFactoradic();
+        Permutation duplicate = Permutation.fromFactoradic(fact,9);
+
+        //System.out.println(Permutation.fromFactoradic(22,4));
+
+        for(int i = 0 ; i < 24; i ++){
+            System.out.println(Permutation.fromFactoradic(i,4));
+        }
 
 
-
-        launch(args);
+        //launch(args);
     }
 }

@@ -1,5 +1,8 @@
 package model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by jsybran on 11/2/16.
  */
@@ -8,16 +11,34 @@ public class Permutation {
     private int[] data;
     public int getLegnth(){return data.length;}
     public int get(int index){return data[index];}
+
+    public static Permutation fromFactoradic(int factoradicNumber, int size){
+        int[] code = new int[size];
+        for(int radixBase = 2; radixBase <= size;radixBase++){
+            code[size - radixBase] = factoradicNumber % radixBase;
+            factoradicNumber /= radixBase;
+        }
+        List<Integer> remainingIntegers = new LinkedList<Integer>();
+        for(int i = 1; i <= size; i++)
+            remainingIntegers.add(i);
+        int[] data = new int[size];
+        for(int i = 0; i < size; i++){
+            data[i] = remainingIntegers.get(code[i]);
+            remainingIntegers.remove(code[i]);
+        }
+        return new Permutation(data);
+    }
+
     public int getFactoradic(){
-        int[] inversions = getInversions();
+        int[] code = getLehmerCode();
         int result = 0;
-        for(int radix = 1; radix <= inversions.length; radix++){
-            result += inversions[inversions.length - radix] * factorial(radix);
+        for(int radix = 0; radix < code.length; radix++){
+            result += code[code.length - radix-1] * factorial(radix);
         }
         return result;
     }
 
-    private int factorial(int n){
+    private static int factorial(int n){
         if(n == 0) return 1;
 
         int result = n;
@@ -29,15 +50,16 @@ public class Permutation {
         return  result;
     }
 
-    public int[] getInversions(){
+    public int[] getLehmerCode(){
         //defaults to 0
-        int[] inversions = new int[data.length];
-        for(int permValue = 1; permValue <= data.length; permValue++){
-            for(int indexBelowValue = 1; indexBelowValue < getIndexOf(permValue);indexBelowValue++){
-                if(permValue < data[indexBelowValue]) inversions[permValue-1]++;
+        int[] code = new int[data.length];
+        for(int i = 1; i <= data.length;i++){
+            for(int j = getIndexOf(i)+1; j < data.length; j++){
+                if(i > data[j])
+                    code[i-1]++;
             }
         }
-        return  inversions;
+        return code;
     }
 
     public int getIndexOf(int value){
@@ -74,4 +96,18 @@ public class Permutation {
     }
 
 
+    private String arrayToString(int[] arr){
+        String res = "";
+        for(int val : arr){
+            res += val + " ";
+        }
+        return res.trim();
+    }
+
+    @Override
+    public String toString() {
+
+        return arrayToString(data)
+                +"\n\t" + getFactoradic();
+    }
 }
