@@ -1,11 +1,9 @@
 package model;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by jsybran on 11/2/16.
- */
 public class Permutation {
 
     private int[] data;
@@ -13,18 +11,20 @@ public class Permutation {
     public int get(int index){return data[index];}
 
     public static Permutation fromFactoradic(int factoradicNumber, int size){
+        int numCopy = factoradicNumber;
         int[] code = new int[size];
-        for(int radixBase = 2; radixBase <= size;radixBase++){
-            code[size - radixBase] = factoradicNumber % radixBase;
+        for(int radixBase = 1; radixBase <= size; radixBase++){
+            code[radixBase-1] = factoradicNumber % radixBase;
             factoradicNumber /= radixBase;
         }
         List<Integer> remainingIntegers = new LinkedList<Integer>();
         for(int i = 1; i <= size; i++)
             remainingIntegers.add(i);
         int[] data = new int[size];
-        for(int i = 0; i < size; i++){
-            data[i] = remainingIntegers.get(code[i]);
-            remainingIntegers.remove(code[i]);
+        for(int i = 0; i < size ; i++){
+            int selectedIndex = code[size-i-1];
+            data[i] = remainingIntegers.get(code[size-i-1]);;
+            remainingIntegers.remove(selectedIndex);
         }
         return new Permutation(data);
     }
@@ -33,7 +33,7 @@ public class Permutation {
         int[] code = getLehmerCode();
         int result = 0;
         for(int radix = 0; radix < code.length; radix++){
-            result += code[code.length - radix-1] * factorial(radix);
+            result += code[radix] * factorial(radix);
         }
         return result;
     }
@@ -69,7 +69,7 @@ public class Permutation {
         throw new IndexOutOfBoundsException("Requested Bad Value");
     }
 
-    public boolean isPermutation(int[] data){
+    public static boolean isPermutation(int[] data){
         //defaults to false
         boolean[] seen = new boolean[data.length];
         for(int d : data)
@@ -108,6 +108,23 @@ public class Permutation {
     public String toString() {
 
         return arrayToString(data)
+                +"\n\t" + arrayToString(getLehmerCode())
                 +"\n\t" + getFactoradic();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Permutation that = (Permutation) o;
+
+        return Arrays.equals(data, that.data);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(data);
     }
 }
