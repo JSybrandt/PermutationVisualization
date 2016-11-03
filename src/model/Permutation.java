@@ -11,34 +11,28 @@ public class Permutation {
     public int get(int index){return data[index];}
 
     public static Permutation fromFactoradic(int factoradicNumber, int size){
-        int numCopy = factoradicNumber;
-        int[] code = new int[size];
-        for(int radixBase = 1; radixBase <= size; radixBase++){
-            code[radixBase-1] = factoradicNumber % radixBase;
-            factoradicNumber /= radixBase;
+        int[] code = getInversionVecFromFact(factoradicNumber,size);
+        List<Integer> tempData = new LinkedList<>();
+        for(int val = size; val > 0; val--){
+            tempData.add(code[val-1],val);
         }
-        List<Integer> remainingIntegers = new LinkedList<Integer>();
-        for(int i = 1; i <= size; i++)
-            remainingIntegers.add(i);
         int[] data = new int[size];
-        for(int i = 0; i < size ; i++){
-            int selectedIndex = code[size-i-1];
-            data[i] = remainingIntegers.get(code[size-i-1]);;
-            remainingIntegers.remove(selectedIndex);
+        for(int i = 0 ; i < size; i++){
+            data[i] = tempData.get(i);
         }
         return new Permutation(data);
     }
 
     public int getFactoradic(){
-        int[] code = getLehmerCode();
+        int[] code = getInversionVector();
         int result = 0;
         for(int radix = 0; radix < code.length; radix++){
-            result += code[radix] * factorial(radix);
+            result += code[code.length-radix-1] * factorial(radix);
         }
         return result;
     }
 
-    private static int factorial(int n){
+    public static int factorial(int n){
         if(n == 0) return 1;
 
         int result = n;
@@ -50,12 +44,21 @@ public class Permutation {
         return  result;
     }
 
-    public int[] getLehmerCode(){
+    public static int[] getInversionVecFromFact(int val, int size){
+        int[] code = new int[size];
+        for(int radixBase = 1; radixBase <= size; radixBase++){
+            code[size - radixBase] = val % radixBase;
+            val /= radixBase;
+        }
+        return code;
+    }
+
+    public int[] getInversionVector(){
         //defaults to 0
         int[] code = new int[data.length];
         for(int i = 1; i <= data.length;i++){
-            for(int j = getIndexOf(i)+1; j < data.length; j++){
-                if(i > data[j])
+            for(int j = 0; j < getIndexOf(i); j++){
+                if(i < data[j])
                     code[i-1]++;
             }
         }
@@ -108,7 +111,7 @@ public class Permutation {
     public String toString() {
 
         return arrayToString(data)
-                +"\n\t" + arrayToString(getLehmerCode())
+                +"\n\t" + arrayToString(getInversionVector())
                 +"\n\t" + getFactoradic();
     }
 

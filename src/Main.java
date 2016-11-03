@@ -43,7 +43,7 @@ public class Main extends Application{
 
         int[] data = {5,9,1,8,2,6,4,7,3};
         Permutation perm = new Permutation(data);
-        int[] inv = perm.getLehmerCode();
+        int[] inv = perm.getInversionVector();
         int fact = perm.getFactoradic();
         Permutation duplicate = Permutation.fromFactoradic(fact,9);
 

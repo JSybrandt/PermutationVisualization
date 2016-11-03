@@ -5,12 +5,30 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by jsybran on 11/2/2016.
  */
 public class PermutationTest {
+
+
+    @Test
+    public void getInversionVecFromFact() throws Exception {
+        int[] longCode = permLong.getInversionVector();
+        int[] genCode = Permutation.getInversionVecFromFact(permLong.getFactoradic(),permLong.getLegnth());
+        assert Arrays.equals(longCode,genCode);
+
+        Permutation testPerm2 = new Permutation(3, 4, 2 ,1);
+        int[] testCode2 = {3, 2, 0, 0};
+        int testFact2 = 22;
+        assert Arrays.equals(Permutation.getInversionVecFromFact(testFact2,4), testCode2);
+
+    }
+
+    @Test
+    public void equals() throws Exception {
+
+    }
+
 
     Permutation perm1;
     Permutation perm2;
@@ -27,27 +45,30 @@ public class PermutationTest {
 
     @Test
     public void fromFactoradic() throws Exception {
-        Permutation perm1Test = Permutation.fromFactoradic(21,4);
-        assert perm1.equals(perm1Test);
         Permutation permLongTest = Permutation.fromFactoradic(permLong.getFactoradic(),permLong.getLegnth());
         assert permLong.equals(permLongTest);
+        Permutation perm1Test = Permutation.fromFactoradic(21,4);
+        assert perm1.equals(perm1Test);
+
     }
 
     @Test
     public void getFactoradic() throws Exception {
+        assert permLong.getFactoradic() == 100577;
         assert perm1.getFactoradic() == 21;
-        assert perm2.getFactoradic() == 3;
+        assert perm2.getFactoradic() == 4;
+
     }
 
     @Test
-    public void getLehmerCode() throws Exception {
-        int[] longCode = permLong.getLehmerCode();
+    public void getInversionVector() throws Exception {
+        int[] longCode = permLong.getInversionVector();
         int[] longCorrect = {2, 3, 6, 4, 0, 2, 2, 1, 0};
         int[] longOptional = {0, 0, 0, 1, 4, 2, 1, 5, 7};
-        assert Arrays.equals(longCode,longOptional);
+        assert Arrays.equals(longCode,longCorrect);
 
-        int[] perm1Code = perm1.getLehmerCode();
-        int[] perm1Correct = {0, 1, 1, 3};
+        int[] perm1Code = perm1.getInversionVector();
+        int[] perm1Correct = {3, 1, 1, 0};
         assert Arrays.equals(perm1Code,perm1Correct);
 
     }
@@ -64,4 +85,17 @@ public class PermutationTest {
         assert Permutation.isPermutation(new int[]{2,4,1,3});
     }
 
+    @Test
+    public void factorial() throws Exception{
+        assert Permutation.factorial(0) == 1;
+        assert Permutation.factorial(1) == 1;
+        assert Permutation.factorial(2) == 2;
+        assert Permutation.factorial(3) == 6;
+        assert Permutation.factorial(4) == 24;
+        assert Permutation.factorial(5) == 120;
+        assert Permutation.factorial(6) == 720;
+        assert Permutation.factorial(7) == 5040;
+        assert Permutation.factorial(8) == 40320;
+        assert Permutation.factorial(9) == 362880;
+    }
 }
