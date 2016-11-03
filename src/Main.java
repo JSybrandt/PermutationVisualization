@@ -11,8 +11,11 @@
  * ApplicationPane.
  */
 
+import controller.PermMatrixController;
+import controller.option.PermVisOption;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.*;
@@ -22,6 +25,14 @@ public class Main extends Application{
     @Override
     public void start(Stage stage){
         BorderPane root = new BorderPane();
+
+
+        Canvas canvas = new Canvas(200,200);
+        PermMatrixController controller = new PermMatrixController(canvas);
+        Permutation perm = new Permutation(5,3,4,1,2);
+        controller.drawPermutation(perm, PermVisOption.GRID);
+        root.setCenter(canvas);
+
         Scene scene = new Scene(root);
         stage.setTitle("Permutation Visualization");
         stage.setHeight(300);
@@ -41,6 +52,8 @@ public class Main extends Application{
         }
 
 
-        //launch(args);
+
+
+        launch(args);
     }
 }
