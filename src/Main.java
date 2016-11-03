@@ -34,9 +34,10 @@ public class Main extends Application{
 
     public static void main(String[] args) {
 
-        PermutationGenerator gen = new SwapGenerator(7);
+        PermutationGenerator gen = new SwapGenerator(4);
         for(Permutation p : gen.generate()){
             System.out.println(p);
+            System.out.println(p.toCyclicNotation());
         }
 
 

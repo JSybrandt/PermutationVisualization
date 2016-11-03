@@ -1,8 +1,8 @@
 package model;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import javafx.util.Pair;
+
+import java.util.*;
 
 import static util.FactorialMath.factorial;
 
@@ -103,6 +103,43 @@ public class Permutation {
             newData[data[val-1]-1] = val;
         }
         return new Permutation(newData);
+    }
+
+    public Map<Integer,Integer> toGraph(){
+      Map<Integer,Integer> graph = new HashMap<>();
+        for(int i = 1; i <= data.length; i++){
+            graph.put(i,data[i-1]);
+        }
+        return graph;
+    }
+
+    public String toCyclicNotation(){
+        List<List<Integer>> cycles = new ArrayList<>();
+        Set<Integer> seen = new HashSet<>();
+        Map<Integer,Integer> graph = toGraph();
+        for(int i = 1; i <= data.length; i++){
+            if(!seen.contains(i)){
+                int currIndex = i;
+                List<Integer> cycle = new ArrayList<>();
+                while(!seen.contains(currIndex)){
+                    cycle.add(currIndex);
+                    seen.add(currIndex);
+                    currIndex = graph.get(currIndex);
+                }
+                cycles.add(cycle);
+            }
+        }
+        String res = "";
+        for(List<Integer> cycle : cycles){
+            String subString = "";
+            for(int val : cycle)
+                subString += val + " ";
+            subString = subString.trim();
+            if(cycle.size() > 1)
+                subString = "(" + subString + ")";
+            res += subString + " ";
+        }
+        return res.trim();
     }
 
     @Override
