@@ -8,9 +8,9 @@ import static util.FactorialMath.factorial;
 /**
  * Created by jsybran on 11/2/16.
  */
-public class FactoraticGenerator extends PermutationGenerator {
+public class FactoradicGenerator extends PermutationGenerator {
 
-    public FactoraticGenerator(int size){
+    public FactoradicGenerator(int size){
         super(size);
     }
 
