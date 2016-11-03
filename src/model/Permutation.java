@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static util.FactorialMath.factorial;
+
 public class Permutation {
 
     private int[] data;
@@ -30,18 +32,6 @@ public class Permutation {
             result += code[code.length-radix-1] * factorial(radix);
         }
         return result;
-    }
-
-    public static int factorial(int n){
-        if(n == 0) return 1;
-
-        int result = n;
-        n--;
-        while(n > 0){
-            result *= n;
-            n--;
-        }
-        return  result;
     }
 
     public static int[] getInversionVecFromFact(int val, int size){
@@ -105,6 +95,14 @@ public class Permutation {
             res += val + " ";
         }
         return res.trim();
+    }
+
+    public Permutation getInverse(){
+        int[] newData = new int[data.length];
+        for(int val = 1; val <= data.length; val++){
+            newData[data[val-1]-1] = val;
+        }
+        return new Permutation(newData);
     }
 
     @Override

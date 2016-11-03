@@ -9,6 +9,11 @@ import java.util.Arrays;
  * Created by jsybran on 11/2/2016.
  */
 public class PermutationTest {
+    @Test
+    public void getInverse() throws Exception {
+        assert permLong.equals(permLong.getInverse().getInverse());
+        assert permLong.getInverse().equals(permLong.getInverse().getInverse().getInverse());
+    }
 
 
     @Test
@@ -85,17 +90,4 @@ public class PermutationTest {
         assert Permutation.isPermutation(new int[]{2,4,1,3});
     }
 
-    @Test
-    public void factorial() throws Exception{
-        assert Permutation.factorial(0) == 1;
-        assert Permutation.factorial(1) == 1;
-        assert Permutation.factorial(2) == 2;
-        assert Permutation.factorial(3) == 6;
-        assert Permutation.factorial(4) == 24;
-        assert Permutation.factorial(5) == 120;
-        assert Permutation.factorial(6) == 720;
-        assert Permutation.factorial(7) == 5040;
-        assert Permutation.factorial(8) == 40320;
-        assert Permutation.factorial(9) == 362880;
-    }
 }
