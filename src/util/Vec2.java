@@ -66,7 +66,7 @@ public class Vec2 {
     }
 
     public double angle(Vec2 other){
-        return Math.acos(this.dot(other) / (this.magnitude() * other.magnitude()));
+        return  Math.acos(this.dot(other) / (this.magnitude() * other.magnitude()));
     }
 
 }

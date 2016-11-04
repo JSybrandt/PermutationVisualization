@@ -30,7 +30,7 @@ public class Main extends Application{
         Canvas canvas = new Canvas(200,200);
         PermMatrixController controller = new PermMatrixController(canvas);
         Permutation perm = new Permutation(5,3,4,1,2);
-        controller.drawPermutation(perm, PermVisOption.GRID);
+        controller.drawPermutation(perm, PermVisOption.GRAPH);
         root.setCenter(canvas);
 
         Scene scene = new Scene(root);

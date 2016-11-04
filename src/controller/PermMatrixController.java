@@ -9,7 +9,9 @@ import model.Permutation;
 import util.Vec2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -22,6 +24,7 @@ public class PermMatrixController extends Controller {
     Paint lineColor = Color.BLACK;
     Paint cellColor = Color.RED;
     Paint dotColor = Color.GREY;
+    Paint arrowColor = Color.GREEN;
 
     public void run() {
 
@@ -68,6 +71,26 @@ public class PermMatrixController extends Controller {
         double width = canvas.getWidth();
         double height = canvas.getHeight();
         double radius = Math.min(width,height) /3;
+        Vec2 center = new Vec2(width/2,height/2);
+        Vec2 disp = new Vec2(radius,0);
+        double angle = 2*Math.PI / perm.getLegnth();
+        double dotRadius = Math.min(width,height) / 16;
+        Map<Integer,Vec2> positions = new HashMap<>();
+        for(int i = 0; i < perm.getLegnth(); i++){
+            positions.put(i+1,disp.rotate(angle*i).plus(center));
+        }
+
+        gc.setFill(dotColor);
+        Vec2 dotDisp = new Vec2(dotRadius,dotRadius);
+        for(Vec2 vec : positions.values()){
+            Vec2 corner = vec.minus(dotDisp);
+            gc.fillOval(corner.X(), corner.Y(), dotRadius*2, dotRadius*2);
+        }
+        gc.setStroke(arrowColor);
+        gc.setFill(arrowColor);
+        for(int i = 0; i < perm.getLegnth(); i++){
+            drawArrow(positions.get(i+1),positions.get(perm.get(i)));
+        }
     }
 
     private void redrawMatrix(){
@@ -101,21 +124,22 @@ public class PermMatrixController extends Controller {
         }
     }
 
-    private void drawArrow(double startX, double startY, double endX, double endY){
-        Vec2 vec = new Vec2(endX - startX, endY - startY);
+    private void drawArrow(Vec2 start, Vec2 end){
+        Vec2 vec = end.minus(start);
         Vec2[] defaultArrowHead = {
-                new Vec2(-1,0), new Vec2(1,0), new Vec2(0,1)
+                new Vec2(-10,-10), new Vec2(10,-10), new Vec2(0,0)
         };
         double rotation = vec.angle(new Vec2(0,1));
         double[] rotatedTriX = new double[defaultArrowHead.length];
         double[] rotatedTriY = new double[defaultArrowHead.length];
 
         for(int i = 0 ; i < defaultArrowHead.length; i++){
-            Vec2 rotVec = defaultArrowHead[i].rotate(rotation);
+            Vec2 rotVec = defaultArrowHead[i].rotate(rotation).plus(end);
             rotatedTriX[i] = rotVec.X();
             rotatedTriY[i] = rotVec.Y();
         }
-        gc.strokeLine(startX,startY,endX,endY);
+
+        gc.strokeLine(start.X(),start.Y(),end.X(),end.Y());
         gc.fillPolygon(rotatedTriX,rotatedTriY,defaultArrowHead.length);
     }
 }
