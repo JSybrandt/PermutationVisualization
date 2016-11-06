@@ -11,7 +11,8 @@
  * ApplicationPane.
  */
 
-import controller.PermMatrixController;
+import controller.PermDetailController;
+import controller.PermDisplayController;
 import controller.option.PermVisOption;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -19,6 +20,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.*;
+import view.TabDetailPane;
 
 public class Main extends Application{
 
@@ -27,11 +29,13 @@ public class Main extends Application{
         BorderPane root = new BorderPane();
 
 
-        Canvas canvas = new Canvas(200,200);
-        PermMatrixController controller = new PermMatrixController(canvas);
+        //Canvas canvas = new Canvas(200,200);
+        //PermDisplayController controller = new PermDisplayController(canvas);
         Permutation perm = new Permutation(5,3,4,1,2);
-        controller.drawPermutation(perm, PermVisOption.GRAPH);
-        root.setCenter(canvas);
+        TabDetailPane tdp = new TabDetailPane();
+        PermDetailController pdc = new PermDetailController(tdp,perm);
+        //controller.drawPermutation(perm, PermVisOption.GRAPH);
+        root.setCenter(tdp);
 
         Scene scene = new Scene(root);
         stage.setTitle("Permutation Visualization");

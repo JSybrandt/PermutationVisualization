@@ -13,11 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * Created by jsybran on 11/3/16.
- */
-public class PermMatrixController extends Controller {
+public class PermDisplayController extends Controller {
 
     Canvas canvas;
 
@@ -34,7 +30,7 @@ public class PermMatrixController extends Controller {
     Permutation perm;
     PermVisOption option;
 
-    public PermMatrixController(Canvas canvas) {
+    public PermDisplayController(Canvas canvas) {
         super(canvas);
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();

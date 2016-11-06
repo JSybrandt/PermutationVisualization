@@ -145,9 +145,7 @@ public class Permutation {
     @Override
     public String toString() {
 
-        return arrayToString(data)
-                +"\n\t" + arrayToString(getInversionVector())
-                +"\n\t" + getFactoradic();
+        return arrayToString(data);
     }
 
     @Override
