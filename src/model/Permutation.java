@@ -142,6 +142,8 @@ public class Permutation {
         return res.trim();
     }
 
+    public int[] getData(){return data;}
+
     @Override
     public String toString() {
 

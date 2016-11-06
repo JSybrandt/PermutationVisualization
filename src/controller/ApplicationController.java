@@ -16,47 +16,102 @@
 
 package controller;
 
+import controller.option.GeneratorOption;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.Pane;
+import model.*;
 import view.ApplicationPane;
 import view.SettingsPane;
+import view.TabDetailPane;
 import view.ViewContainer;
-import view.visualization.PermVis;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ApplicationController extends Controller{
 
-    ApplicationPane appPane;
-    Map<Controller, ViewContainer> controller2Container;
+    private ApplicationPane appPane;
 
-    SettingsPane settingsPane;
-    SettingsController settingsController;
+    private SettingsPane settingsPane;
+    private SettingsController settingsController;
+
+    private TabDetailPane tabDetailPane;
+    private PermDetailController permDetailController;
+
+    private Pane mainVis;
+    private PermSetController visualizationController;
+
+    private Pane braidVis;
+    private BraidController braidController;
+
+    private int permutationLength;
+    private GeneratorOption generatorOption;
 
     public ApplicationController(ApplicationPane root){
         super(root);
         this.appPane = root;
-        controller2Container = new HashMap<>();
+        createViews();
+        attachControllers();
     }
 
     @Override
     public void run(){
-        createViews();
-        attachControllers();
+        if(generatorOption != null && permutationLength > 0) {
+            PermutationGenerator gen;
+            switch (generatorOption) {
+                case FACTORADIC:
+                    gen = new FactoradicGenerator(permutationLength);
+                    break;
+                case HEAP:
+                    gen = new SwapGenerator(permutationLength);
+                    break;
+                case INSERT:
+                    gen = new InsertionGenerator(permutationLength);
+                    break;
+                default:
+                    gen = new FactoradicGenerator(permutationLength);
+            }
+            visualizationController.setGenerator(gen);
+            visualizationController.run();
 
+            braidController.setPermLength(permutationLength);
+            braidController.run();
+        }
     }
 
     private void createViews(){
-
         settingsPane = appPane.getSettingPane();
+        tabDetailPane = appPane.getTabDetailPane();
+        mainVis = appPane.getMainVisualization();
+        braidVis = appPane.getBraidVisualization();
+
     }
 
     private void attachControllers(){
         settingsController = new SettingsController(settingsPane,this);
         settingsController.run();
+        permDetailController = new PermDetailController(tabDetailPane);
+        permDetailController.run();
+        visualizationController = new PermSetController(mainVis,this);
+        braidController = new BraidController(braidVis,this);
     }
 
-    //called by other controllers
-    public void addVisualization(String title, PermVis visualization){
-
+    public PermDetailController getPermDetailController(){
+        return permDetailController;
     }
+
+    public void setPermutationLength(int length){
+        permutationLength = length;
+    }
+
+    public void setGeneratorOption(GeneratorOption opt){
+        generatorOption = opt;
+    }
+
+    public void setSelectedPerm(Permutation perm){
+        permDetailController.setPermutation(perm);
+        braidController.setSelectedPerm(perm);
+        visualizationController.selectPermutation(perm);
+    }
+
 }

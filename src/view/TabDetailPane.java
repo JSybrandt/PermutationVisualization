@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public class TabDetailPane extends HBox {
+public class TabDetailPane extends VBox {
 
     private TabPane tabPane;
     private VBox detailPane;
@@ -21,17 +21,21 @@ public class TabDetailPane extends HBox {
         getChildren().add(detailPane);
     }
 
-    public void addTab(String title, Node value){
+    public Tab addTab(String title){
         Tab newTab = new Tab();
         newTab.setText(title);
-        newTab.setContent(value);
+        newTab.closableProperty().set(false);
+        tabPane.getTabs().add(newTab);
+        return newTab;
     }
 
-    public void addDetail(String title, String value){
+    public Label addDetail(String title){
         if(detailPane.getChildren().size()>0)
             detailPane.getChildren().add(new Separator());
         detailPane.getChildren().add(new Label(title));
-        detailPane.getChildren().add(new Label(value));
+        Label ret = new Label();
+        detailPane.getChildren().add(ret);
+        return ret;
     }
 
 }

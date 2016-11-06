@@ -3,6 +3,7 @@ package controller;
 import controller.option.PermVisOption;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import model.Permutation;
 import view.TabDetailPane;
 
@@ -16,26 +17,36 @@ public class PermDetailController extends Controller {
     Canvas graphCanvas;
     PermDisplayController matrixController;
     PermDisplayController graphController;
-    public PermDetailController(TabDetailPane tabDetailPane, Permutation perm) {
+
+    Label permValue;
+    Label permCycle;
+    Label permFactoradic;
+
+    public PermDetailController(TabDetailPane tabDetailPane) {
         super(tabDetailPane);
         this.tabDetailPane = tabDetailPane;
         matrixCanvas = new Canvas(200,200);
         graphCanvas = new Canvas(200,200);
         matrixController = new PermDisplayController(matrixCanvas);
         graphController = new PermDisplayController(graphCanvas);
-        this.permutation = perm;
-        this.run();
     }
 
     @Override
     public void run() {
+        tabDetailPane.addTab("Matrix").setContent(matrixCanvas);
+        tabDetailPane.addTab("Graph").setContent(graphCanvas);
+        permValue = tabDetailPane.addDetail("Permutation");
+        permCycle = tabDetailPane.addDetail("Cyclic Notation");
+        permFactoradic = tabDetailPane.addDetail("Factoradic Number");
+    }
+
+    public void setPermutation(Permutation permutation){
+        this.permutation = permutation;
+        permValue.setText(permutation.toString());
+        permCycle.setText(permutation.toCyclicNotation());
+        permFactoradic.setText(Integer.toString(permutation.getFactoradic()));
         matrixController.drawPermutation(permutation, PermVisOption.GRID);
         graphController.drawPermutation(permutation,PermVisOption.GRAPH);
-        tabDetailPane.addTab("Matrix",matrixCanvas);
-        tabDetailPane.addTab("Graph",graphCanvas);
-        tabDetailPane.addDetail("Permutation",permutation.toString());
-        tabDetailPane.addDetail("Cyclic Notation",permutation.toCyclicNotation());
-        tabDetailPane.addDetail("Factoradic Number",Integer.toString(permutation.getFactoradic()));
     }
 
 }

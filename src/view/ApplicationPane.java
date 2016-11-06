@@ -12,33 +12,41 @@
 
 package view;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 
 public class ApplicationPane extends BorderPane {
 
     private SettingsPane settingPane;
-    private ScrollPane scrollPane;
-    private TilePane containerTilePane;
+    private TabDetailPane tabDetailPane;
+    private Pane mainVisualization;
+    private Pane braidVisualization;
     public ApplicationPane(){
+        tabDetailPane = new TabDetailPane();
         settingPane = new SettingsPane();
-        scrollPane = new ScrollPane();
-        containerTilePane = new TilePane();
-        scrollPane.setFitToWidth(true);
-        scrollPane.setContent(containerTilePane);
+        mainVisualization = new Pane();
+        braidVisualization = new Pane();
+        braidVisualization.setMinWidth(100);
         setTop(settingPane);
-        setCenter(scrollPane);
+        setRight(tabDetailPane);
+        setCenter(mainVisualization);
+        setLeft(braidVisualization);
     }
 
     public SettingsPane getSettingPane(){return settingPane;}
 
-    public void addContainer(ViewContainer container){
-        containerTilePane.getChildren().add(container);
+    public TabDetailPane getTabDetailPane() {
+        return tabDetailPane;
     }
 
-    public void removeMazeContainer(ViewContainer container){
-        containerTilePane.getChildren().remove(container);
+    public Pane getMainVisualization() {
+        return mainVisualization;
     }
 
+    public Pane getBraidVisualization(){
+        return braidVisualization;
+    }
 }
