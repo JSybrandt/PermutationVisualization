@@ -113,7 +113,7 @@ public class Permutation {
         return graph;
     }
 
-    public String toCyclicNotation(){
+    public List<List<Integer>> getCycles(){
         List<List<Integer>> cycles = new ArrayList<>();
         Set<Integer> seen = new HashSet<>();
         Map<Integer,Integer> graph = toGraph();
@@ -129,6 +129,11 @@ public class Permutation {
                 cycles.add(cycle);
             }
         }
+        return cycles;
+    }
+
+    public String toCyclicNotation(){
+        List<List<Integer>> cycles = getCycles();
         String res = "";
         for(List<Integer> cycle : cycles){
             String subString = "";

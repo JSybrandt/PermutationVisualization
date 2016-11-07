@@ -114,7 +114,7 @@ public class PermSetController extends Controller {
 
     }
     private void displayMed(List<Permutation> data){
-
+        displaySmall(data);
     }
     //color
     private void displayLarge(List<Permutation> data){

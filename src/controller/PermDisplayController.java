@@ -123,6 +123,29 @@ public class PermDisplayController extends Controller {
             double centerY = i*cellHeight + cellHeight/2;
             gc.fillOval(centerX-dotRadius, centerY-dotRadius, dotRadius*2, dotRadius*2);
         }
+
+        gc.setStroke(Color.BLACK);
+        gc.setFill(Color.BLACK);
+        for(List<Integer> cycle : perm.getCycles()){
+            for(int i = 0; i < cycle.size(); i++){
+                int source = cycle.get(i)-1;
+                int target = cycle.get((i+1) % cycle.size())-1;
+                if(source != target) {
+                    double sX = source * cellWidth + cellWidth / 2;
+                    double sY = source * cellHeight + cellHeight / 2;
+                    double tX = target * cellWidth + cellWidth / 2;
+                    double tY = target * cellHeight + cellHeight / 2;
+                    double cornerX = tX;
+                    double cornerY = sY;
+                    if (source > target) {//under
+                        cornerX = sX;
+                        cornerY = tY;
+                    }
+                    gc.strokeLine(sX,sY,cornerX,cornerY);
+                    drawArrow(new Vec2(cornerX,cornerY), new Vec2(tX,tY));
+                }
+            }
+        }
     }
 
     private void drawArrow(Vec2 start, Vec2 end){
