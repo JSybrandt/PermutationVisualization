@@ -142,6 +142,27 @@ public class Permutation {
         return res.trim();
     }
 
+    public List<Permutation> getAdjacentPerms(){
+        int[] data = this.getData();
+        List<Permutation> adjPerms = new ArrayList<>();
+        for(int i  = 1 ; i < data.length; i++){
+            int[] cp = Arrays.copyOf(data,data.length);
+            int tmp = cp[i-1];
+            cp[i-1] = cp[i];
+            cp[i] = tmp;
+            adjPerms.add(new Permutation(cp));
+        }
+        return adjPerms;
+    }
+
+    public int getNumFixed(){
+        int count = 0;
+        for(int i = 0 ; i < data.length; i++)
+            if(i+1 == data[i])
+                count++;
+        return count;
+    }
+
     public int[] getData(){return data;}
 
     @Override

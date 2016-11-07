@@ -37,10 +37,10 @@ public class BraidController extends Controller {
 
     @Override
     public void run() {
+        visPane.getChildren().clear();
+        selections.clear();
         if(permLength > 0 && permLength <= 5){
 
-            visPane.getChildren().clear();
-            selections.clear();
             double width = effectiveWidth();
             double height = visPane.getHeight();
 

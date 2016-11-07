@@ -14,29 +14,33 @@ package view;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
 
 public class ApplicationPane extends BorderPane {
 
-    private SettingsPane settingPane;
+    private HBox settingPane;
     private TabDetailPane tabDetailPane;
     private Pane mainVisualization;
+    private Pane selectionPane;
     private Pane braidVisualization;
     public ApplicationPane(){
         tabDetailPane = new TabDetailPane();
-        settingPane = new SettingsPane();
+        settingPane = new HBox();
         mainVisualization = new Pane();
+        selectionPane = new Pane();
+        selectionPane.mouseTransparentProperty().set(true);
         braidVisualization = new Pane();
         braidVisualization.setMinWidth(100);
         setTop(settingPane);
         setRight(tabDetailPane);
-        setCenter(mainVisualization);
+        StackPane stack = new StackPane();
+        stack.getChildren().add(mainVisualization);
+        stack.getChildren().add(selectionPane);
+        setCenter(stack);
         setLeft(braidVisualization);
     }
 
-    public SettingsPane getSettingPane(){return settingPane;}
+    public HBox getSettingPane(){return settingPane;}
 
     public TabDetailPane getTabDetailPane() {
         return tabDetailPane;
@@ -45,6 +49,8 @@ public class ApplicationPane extends BorderPane {
     public Pane getMainVisualization() {
         return mainVisualization;
     }
+
+    public Pane getSelectionPane(){return selectionPane; }
 
     public Pane getBraidVisualization(){
         return braidVisualization;

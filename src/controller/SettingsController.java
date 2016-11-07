@@ -16,18 +16,47 @@
 
 package controller;
 
-import util.BiMap;
-import view.SettingsPane;
+import controller.option.GeneratorOption;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Spinner;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 public class SettingsController extends Controller {
 
-    SettingsPane settingsPane;
+    HBox settingsPane;
 
 
-    public SettingsController(SettingsPane pane, ApplicationController appController) {
+    public SettingsController(HBox pane, ApplicationController appController) {
         super(pane);
         settingsPane = pane;
+        Button refresh = new Button("REFRESH");
+        Spinner spinner = new Spinner(2,7,4);
+        ComboBox cbox = new ComboBox();
+        cbox.getItems().add(0,"Factoradic Generator");
+        cbox.getItems().add(1,"Inserton Generator");
+        cbox.getItems().add(2,"Swap Generator");
+        cbox.getSelectionModel().select(0);
 
+        refresh.setOnAction(event -> {
+            appController.setPermutationLength((int)spinner.getValue());
+            switch (cbox.getSelectionModel().getSelectedIndex()){
+                case 0:
+                    appController.setGeneratorOption(GeneratorOption.FACTORADIC);
+                    break;
+                case 1:
+                    appController.setGeneratorOption(GeneratorOption.INSERT);
+                    break;
+                case 2:
+                    appController.setGeneratorOption(GeneratorOption.HEAP);
+                    break;
+            }
+            appController.run();
+        });
+        settingsPane.getChildren().add(refresh);
+        settingsPane.getChildren().add(spinner);
+        settingsPane.getChildren().add(cbox);
     }
 
     @Override

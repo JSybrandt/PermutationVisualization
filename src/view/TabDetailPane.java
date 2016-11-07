@@ -11,22 +11,23 @@ import javafx.scene.layout.VBox;
 
 public class TabDetailPane extends VBox {
 
-    private TabPane tabPane;
+    private VBox tabPane;
     private VBox detailPane;
     public TabDetailPane(){
-        tabPane = new TabPane();
+        tabPane = new VBox();
         tabPane.resize(200,200);
         detailPane = new VBox();
         getChildren().add(tabPane);
         getChildren().add(detailPane);
     }
 
-    public Tab addTab(String title){
-        Tab newTab = new Tab();
-        newTab.setText(title);
-        newTab.closableProperty().set(false);
-        tabPane.getTabs().add(newTab);
-        return newTab;
+    public Pane addTab(String title){
+        if(tabPane.getChildren().size()>0)
+            tabPane.getChildren().add(new Separator());
+        tabPane.getChildren().add(new Label(title));
+        Pane ret = new Pane();
+        tabPane.getChildren().add(ret);
+        return ret;
     }
 
     public Label addDetail(String title){

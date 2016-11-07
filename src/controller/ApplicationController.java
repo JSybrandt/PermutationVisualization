@@ -17,28 +17,24 @@
 package controller;
 
 import controller.option.GeneratorOption;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import model.*;
 import view.ApplicationPane;
-import view.SettingsPane;
 import view.TabDetailPane;
-import view.ViewContainer;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ApplicationController extends Controller{
 
     private ApplicationPane appPane;
 
-    private SettingsPane settingsPane;
+    private HBox settingsPane;
     private SettingsController settingsController;
 
     private TabDetailPane tabDetailPane;
     private PermDetailController permDetailController;
 
     private Pane mainVis;
+    private Pane selectionPane;
     private PermSetController visualizationController;
 
     private Pane braidVis;
@@ -84,6 +80,7 @@ public class ApplicationController extends Controller{
         tabDetailPane = appPane.getTabDetailPane();
         mainVis = appPane.getMainVisualization();
         braidVis = appPane.getBraidVisualization();
+        selectionPane = appPane.getSelectionPane();
 
     }
 
@@ -92,7 +89,7 @@ public class ApplicationController extends Controller{
         settingsController.run();
         permDetailController = new PermDetailController(tabDetailPane);
         permDetailController.run();
-        visualizationController = new PermSetController(mainVis,this);
+        visualizationController = new PermSetController(mainVis,selectionPane,this);
         braidController = new BraidController(braidVis,this);
     }
 
@@ -102,6 +99,7 @@ public class ApplicationController extends Controller{
 
     public void setPermutationLength(int length){
         permutationLength = length;
+        braidController.setPermLength(length);
     }
 
     public void setGeneratorOption(GeneratorOption opt){

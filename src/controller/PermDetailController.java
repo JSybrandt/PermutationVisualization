@@ -33,8 +33,8 @@ public class PermDetailController extends Controller {
 
     @Override
     public void run() {
-        tabDetailPane.addTab("Matrix").setContent(matrixCanvas);
-        tabDetailPane.addTab("Graph").setContent(graphCanvas);
+        tabDetailPane.addTab("Matrix").getChildren().add(matrixCanvas);
+        tabDetailPane.addTab("Graph").getChildren().add(graphCanvas);
         permValue = tabDetailPane.addDetail("Permutation");
         permCycle = tabDetailPane.addDetail("Cyclic Notation");
         permFactoradic = tabDetailPane.addDetail("Factoradic Number");

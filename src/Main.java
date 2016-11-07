@@ -33,8 +33,8 @@ public class Main extends Application{
 
         ApplicationPane mainAppPane = new ApplicationPane();
         ApplicationController mainAppController = new ApplicationController(mainAppPane);
-        mainAppController.setGeneratorOption(GeneratorOption.FACTORADIC);
-        mainAppController.setPermutationLength(3);
+        mainAppController.setGeneratorOption(GeneratorOption.INSERT);
+        mainAppController.setPermutationLength(4);
         mainAppController.run();
         root.setCenter(mainAppPane);
         Scene scene = new Scene(root);
@@ -48,16 +48,6 @@ public class Main extends Application{
     }
 
     public static void main(String[] args) {
-
-        PermutationGenerator gen = new SwapGenerator(4);
-        for(Permutation p : gen.generate()){
-            System.out.println(p);
-            System.out.println(p.toCyclicNotation());
-        }
-
-
-
-
         launch(args);
     }
 }
