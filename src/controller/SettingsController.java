@@ -26,7 +26,7 @@ import javafx.scene.layout.Pane;
 public class SettingsController extends Controller {
 
     HBox settingsPane;
-
+    HelpWindowController helpController;
 
     public SettingsController(HBox pane, ApplicationController appController) {
         super(pane);
@@ -57,6 +57,10 @@ public class SettingsController extends Controller {
         settingsPane.getChildren().add(refresh);
         settingsPane.getChildren().add(spinner);
         settingsPane.getChildren().add(cbox);
+        Button helpButton = new Button();
+        helpController = new HelpWindowController(helpButton);
+        settingsPane.getChildren().add(helpButton);
+        helpController.run();
     }
 
     @Override

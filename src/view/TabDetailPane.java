@@ -1,24 +1,25 @@
 package view;
 
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public class TabDetailPane extends VBox {
+public class TabDetailPane extends ScrollPane {
 
     private VBox tabPane;
     private VBox detailPane;
+    private VBox meta;
     public TabDetailPane(){
         tabPane = new VBox();
-        tabPane.resize(200,200);
         detailPane = new VBox();
-        getChildren().add(tabPane);
-        getChildren().add(detailPane);
+        meta = new VBox();
+        meta.getChildren().add(tabPane);
+        meta.getChildren().add(new Separator());
+        meta.getChildren().add(detailPane);
+        setContent(meta);
+        setFitToWidth(true);
     }
 
     public Pane addTab(String title){

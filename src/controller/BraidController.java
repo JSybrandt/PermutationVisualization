@@ -48,7 +48,7 @@ public class BraidController extends Controller {
             data = gen.generate();
             ArrayList<Color> valueColors = new ArrayList<>();
             double rowHeight = rowHeight();
-            double valueWidth = width / permLength;
+            double valueWidth = width / (permLength - 1);
             for(int i = 0; i < permLength; i++){
                 valueColors.add(Color.hsb(i*(360.0/(permLength+1)),1,1));
                 selections.add(new Circle(DOT_RADIUS,valueColors.get(i)));
@@ -97,7 +97,7 @@ public class BraidController extends Controller {
                 if(!visPane.getChildren().contains(s))
                     visPane.getChildren().add(s);
             }
-            double valueWidth = effectiveWidth() / perm.getLegnth();
+            double valueWidth = effectiveWidth() / (perm.getLegnth() - 1);
             for (int i = 0; i < perm.getLegnth(); i++) {
                 Circle s = selections.get(i);
                 s.setCenterX(perm.getIndexOf(i + 1) * valueWidth + marginSize());

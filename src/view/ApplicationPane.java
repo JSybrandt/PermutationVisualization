@@ -12,8 +12,10 @@
 
 package view;
 
+import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 
 public class ApplicationPane extends BorderPane {
@@ -31,11 +33,17 @@ public class ApplicationPane extends BorderPane {
         selectionPane.mouseTransparentProperty().set(true);
         braidVisualization = new Pane();
         braidVisualization.setMinWidth(100);
-        setTop(settingPane);
-        setRight(tabDetailPane);
         StackPane stack = new StackPane();
         stack.getChildren().add(mainVisualization);
         stack.getChildren().add(selectionPane);
+        //stack.setStyle("-fx-border-color: black");
+        braidVisualization.setStyle("-fx-border-color: black");
+        tabDetailPane.setStyle("-fx-border-color: black");
+        selectionPane.setStyle("-fx-border-color: black");
+        tabDetailPane.setPadding(new Insets(0,5,0,5));
+
+        setTop(settingPane);
+        setRight(tabDetailPane);
         setCenter(stack);
         setLeft(braidVisualization);
     }

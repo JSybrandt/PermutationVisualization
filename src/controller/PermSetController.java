@@ -37,8 +37,12 @@ public class PermSetController extends Controller {
         this.visualizationPane = visualizationPane;
         this.parentController = parent;
         this.selectionPane = selectionPane;
-        //visualizationPane.widthProperty().addListener(observable -> run());
-        //visualizationPane.heightProperty().addListener(observable -> run());
+        visualizationPane.widthProperty().addListener(observable -> resize());
+        visualizationPane.heightProperty().addListener(observable -> resize());
+    }
+
+    public void resize(){
+        visualizationPane.getChildren().clear();
     }
 
     public void setGenerator(PermutationGenerator generator) {
