@@ -137,10 +137,6 @@ public class PermDisplayController extends Controller {
                     double tY = target * cellHeight + cellHeight / 2;
                     double cornerX = tX;
                     double cornerY = sY;
-                    if (source > target) {//under
-                        cornerX = sX;
-                        cornerY = tY;
-                    }
                     gc.strokeLine(sX,sY,cornerX,cornerY);
                     drawArrow(new Vec2(cornerX,cornerY), new Vec2(tX,tY));
                 }
