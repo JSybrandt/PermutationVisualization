@@ -22,6 +22,7 @@ import javafx.scene.layout.Pane;
 import model.*;
 import view.ApplicationPane;
 import view.TabDetailPane;
+import view.ZoomPane;
 
 public class ApplicationController extends Controller{
 

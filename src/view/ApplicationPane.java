@@ -24,14 +24,15 @@ public class ApplicationPane extends BorderPane {
     private TabDetailPane tabDetailPane;
     private Pane mainVisualization;
     private Pane selectionPane;
-    private Pane braidVisualization;
+    private ZoomPane braidVisualization;
     public ApplicationPane(){
         tabDetailPane = new TabDetailPane();
         settingPane = new HBox();
         mainVisualization = new Pane();
         selectionPane = new Pane();
         selectionPane.mouseTransparentProperty().set(true);
-        braidVisualization = new Pane();
+        braidVisualization = new ZoomPane();
+        braidVisualization.setHorizontalMotion(false);
         braidVisualization.setMinWidth(100);
         StackPane stack = new StackPane();
         stack.getChildren().add(mainVisualization);

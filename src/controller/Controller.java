@@ -33,7 +33,7 @@ public abstract class Controller {
         node.setOnKeyPressed(this::onViewKeyPressed);
         node.setOnKeyReleased(this::onViewKeyReleased);
         node.setOnMouseMoved(this::onViewMouseMoved);
-        node.setOnScroll(this::onViewScroll);
+        //node.setOnScroll(this::onViewScroll);
     }
 
     public void onViewMouseClicked(MouseEvent event){}
