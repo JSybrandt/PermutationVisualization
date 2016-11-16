@@ -119,6 +119,26 @@ public class PermSetController extends Controller {
     }
     private void displayMed(List<Permutation> data){
         displaySmall(data);
+        boolean pushOut = false;
+        Vec2 center = new Vec2(visualizationPane.getWidth()/2, visualizationPane.getHeight()/2);
+        double pushOutRadius = Math.min(visualizationPane.getHeight(),visualizationPane.getWidth())/2.2;
+        for(Node node : visualizationPane.getChildren()){
+            if(node instanceof Circle){
+                pushOut = !pushOut;
+                if(pushOut){
+                    Vec2 nodeLoc = new Vec2(node.getLayoutX(),node.getLayoutY());
+                    Vec2 diff = nodeLoc.minus(center);
+                    diff = diff.unit().scale(pushOutRadius).plus(center);
+                    node.setLayoutX(diff.X());
+                    node.setLayoutY(diff.Y());
+                }
+            }
+            if(node instanceof Line){
+                if(!((Line) node).getStroke().equals(INV_COLOR)){
+                    node.setVisible(false);
+                }
+            }
+        }
     }
     //color
     private void displayLarge(List<Permutation> data){
