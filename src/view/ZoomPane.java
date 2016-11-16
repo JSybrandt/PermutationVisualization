@@ -69,12 +69,14 @@ public class ZoomPane extends Pane {
 
         Vec2 center = getScreenCenter();
         for(Node node : getChildren()){
-            if(! (node instanceof Line)){
+            if(isManipulatable(node)){
                 Vec2 nodePos = getNodePos(node);
                 setNodePos(node,scaleFromPoint(nodePos,center,zoomFactorStep));
-                node.setScaleY(zoomFactor);
-                if(allowHorizontalMotion)
-                    node.setScaleX(zoomFactor);
+                if(!(node instanceof Circle)) {
+                    node.setScaleY(zoomFactor);
+                    if (allowHorizontalMotion)
+                        node.setScaleX(zoomFactor);
+                }
             }
 
         }
@@ -91,8 +93,8 @@ public class ZoomPane extends Pane {
     private void pan(Vec2 viewDelta){
         viewPaneLocation = viewPaneLocation.plus(viewDelta);
         for(Node node : getChildren()){
-            if(!(node instanceof Line))
-            setNodePos(node,getNodePos(node).plus(viewDelta));
+            if(isManipulatable(node))
+                setNodePos(node,getNodePos(node).plus(viewDelta));
         }
         showOnlyOnScreenNodes();
     }
@@ -119,19 +121,12 @@ public class ZoomPane extends Pane {
     }
 
     private void setNodePos(Node node, Vec2 pos){
-        if(node instanceof Circle){
-            ((Circle) node).setCenterX(pos.X());
-            ((Circle) node).setCenterY(pos.Y());
-        } else {
             node.setLayoutX(pos.X());
             node.setLayoutY(pos.Y());
-        }
+
     }
 
     private Vec2 getNodePos(Node node){
-        if(node instanceof Circle)
-            return new Vec2(((Circle) node).getCenterX(),((Circle) node).getCenterY());
-        else
             return new Vec2(node.getLayoutX(), node.getLayoutY());
     }
 
@@ -141,5 +136,9 @@ public class ZoomPane extends Pane {
 
     public void setHorizontalMotion(boolean bool){
         allowHorizontalMotion = bool;
+    }
+
+    private boolean isManipulatable(Node node){
+        return !(node.layoutXProperty().isBound() || node.layoutYProperty().isBound());
     }
 }

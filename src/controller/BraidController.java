@@ -71,13 +71,17 @@ public class BraidController extends Controller {
                     double endX = valueWidth * current.getIndexOf(valueIndex) + marginSize();
                     Color lineColor = valueColors.get(valueIndex-1);
                     //used for zoom pane achors
-                    Circle startNode = new Circle(startX,startY,0, lineColor);
-                    Circle endNode = new Circle(endX,endY,0, Color.color(1,0,0,0));
+                    Circle startNode = new Circle(0,0,0, lineColor);
+                    Circle endNode = new Circle(0,0,0, Color.color(1,0,0,0));
+                    startNode.setLayoutX(startX);
+                    startNode.setLayoutY(startY);
+                    endNode.setLayoutX(endX);
+                    endNode.setLayoutY(endY);
                     Line line = new Line();
-                    line.startXProperty().bind(startNode.centerXProperty());
-                    line.startYProperty().bind(startNode.centerYProperty());
-                    line.endXProperty().bind(endNode.centerXProperty());
-                    line.endYProperty().bind(endNode.centerYProperty());
+                    line.startXProperty().bind(startNode.layoutXProperty());
+                    line.startYProperty().bind(startNode.layoutYProperty());
+                    line.endXProperty().bind(endNode.layoutXProperty());
+                    line.endYProperty().bind(endNode.layoutYProperty());
                     line.setStroke(lineColor);
                     line.setFill(lineColor);
                     line.setStrokeWidth(2);
@@ -119,8 +123,8 @@ public class BraidController extends Controller {
             double yval = selector.getLayoutY() + selector.getBoundsInParent().getHeight()/2;
             for (int i = 0; i < perm.getLegnth(); i++) {
                 Circle s = selections.get(i);
-                s.setCenterX(perm.getIndexOf(i + 1) * valueWidth + marginSize());
-                s.setCenterY(yval);
+                s.setLayoutX(perm.getIndexOf(i + 1) * valueWidth + marginSize());
+                s.setLayoutY(yval);
             }
         }
     }

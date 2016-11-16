@@ -28,7 +28,7 @@ public class ApplicationPane extends BorderPane {
     public ApplicationPane(){
         tabDetailPane = new TabDetailPane();
         settingPane = new HBox();
-        mainVisualization = new Pane();
+        mainVisualization = new ZoomPane();
         selectionPane = new Pane();
         selectionPane.mouseTransparentProperty().set(true);
         braidVisualization = new ZoomPane();
