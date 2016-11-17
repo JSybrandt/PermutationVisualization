@@ -52,10 +52,10 @@ public class HelpWindowController extends Controller {
     private List<String> generateHelpImages(){
         ArrayList<String> res = new ArrayList<>();
 
-        res.add("helpgifs/select_click&drag.gif");
+        res.add("helpgifs/select_click&drag.gif");//*
         res.add("helpgifs/advancedSelection.gif");
         res.add("helpgifs/pan&zoom.gif");
-        res.add("helpgifs/generatorDescription.gif");
+        res.add("helpgifs/generatorDescription.gif");//*
         res.add("helpgifs/changePermSize.gif");
         return res;
     }

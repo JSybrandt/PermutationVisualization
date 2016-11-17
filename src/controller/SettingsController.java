@@ -34,7 +34,7 @@ public class SettingsController extends Controller {
         Spinner spinner = new Spinner(2,7,4);
         ComboBox cbox = new ComboBox();
         cbox.getItems().add(0,"Factoradic Generator");
-        cbox.getItems().add(1,"Inserton Generator");
+        cbox.getItems().add(1,"Insertion Generator");
         cbox.getItems().add(2,"Swap Generator");
         cbox.getSelectionModel().select(0);
 
