@@ -12,18 +12,12 @@
  */
 
 import controller.ApplicationController;
-import controller.PermDetailController;
-import controller.PermDisplayController;
 import controller.option.GeneratorOption;
-import controller.option.PermVisOption;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import model.*;
 import view.ApplicationPane;
-import view.TabDetailPane;
 
 public class Main extends Application{
 

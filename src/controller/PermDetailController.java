@@ -1,7 +1,6 @@
 package controller;
 
 import controller.option.PermVisOption;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import model.Permutation;
@@ -15,8 +14,8 @@ public class PermDetailController extends Controller {
     Permutation permutation;
     Canvas matrixCanvas;
     Canvas graphCanvas;
-    PermDisplayController matrixController;
-    PermDisplayController graphController;
+    PermGraphicController matrixController;
+    PermGraphicController graphController;
 
     Label permValue;
     Label permCycle;
@@ -27,8 +26,8 @@ public class PermDetailController extends Controller {
         this.tabDetailPane = tabDetailPane;
         matrixCanvas = new Canvas(200,200);
         graphCanvas = new Canvas(200,200);
-        matrixController = new PermDisplayController(matrixCanvas);
-        graphController = new PermDisplayController(graphCanvas);
+        matrixController = new PermGraphicController(matrixCanvas);
+        graphController = new PermGraphicController(graphCanvas);
     }
 
     @Override

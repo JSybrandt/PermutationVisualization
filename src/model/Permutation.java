@@ -82,7 +82,7 @@ public class Permutation {
     public Permutation(int a, int b, int c, int d, int e, int f, int g){this(new int[]{a,b,c,d,e,f,g});}
     public Permutation(int[] data){
         if(isPermutation(data)){
-            this.data = data;
+            this.data = Arrays.copyOf(data,data.length);
         }
         else
             throw new IllegalArgumentException("Data provided is not a permutation.");

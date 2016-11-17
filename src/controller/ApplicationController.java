@@ -38,7 +38,7 @@ public class ApplicationController extends Controller{
 
     private ZoomPane mainVis;
     private Pane selectionPane;
-    private PermSetController visualizationController;
+    private MainVisualizationController visualizationController;
 
     private Pane braidVis;
     private BraidController braidController;
@@ -66,7 +66,7 @@ public class ApplicationController extends Controller{
                 case FACTORADIC:
                     gen = new FactoradicGenerator(permutationLength);
                     break;
-                case HEAP:
+                case SWAP:
                     gen = new SwapGenerator(permutationLength);
                     break;
                 case INSERT:
@@ -103,7 +103,7 @@ public class ApplicationController extends Controller{
         settingsController = new SettingsController(settingsPane,this);
         permDetailController = new PermDetailController(tabDetailPane);
         permDetailController.run();
-        visualizationController = new PermSetController(mainVis,selectionPane,this);
+        visualizationController = new MainVisualizationController(mainVis,selectionPane,this);
         braidController = new BraidController(braidVis,this);
         appPane.setOnKeyReleased(event -> {
             if(braidVis.isVisible())

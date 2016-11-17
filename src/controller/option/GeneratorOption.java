@@ -1,7 +1,7 @@
 package controller.option;
 
 public enum GeneratorOption {
-    FACTORADIC(0),HEAP(1),INSERT(2);
+    FACTORADIC(0), SWAP(1),INSERT(2);
     private final int value;
     GeneratorOption(int value) {
         this.value = value;
@@ -27,7 +27,7 @@ public enum GeneratorOption {
             case 0:
                 return FACTORADIC;
             case 1:
-                return HEAP;
+                return SWAP;
             case 2:
                 return INSERT;
         }

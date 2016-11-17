@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PermDisplayController extends Controller {
+public class PermGraphicController extends Controller {
 
     Canvas canvas;
 
@@ -31,7 +31,7 @@ public class PermDisplayController extends Controller {
     Permutation perm;
     PermVisOption option;
 
-    public PermDisplayController(Canvas canvas) {
+    public PermGraphicController(Canvas canvas) {
         super(canvas);
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
@@ -50,17 +50,11 @@ public class PermDisplayController extends Controller {
         if(perm == null) return;
 
         switch (option) {
-            case FACT_NUMBER:
-                break;
-            case CYCLIC:
-                break;
             case GRID:
                 redrawMatrix();
                 break;
             case GRAPH:
                 redrawGraph();
-                break;
-            case FACT_COLOR:
                 break;
         }
     }

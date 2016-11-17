@@ -17,12 +17,10 @@
 package controller;
 
 import controller.option.GeneratorOption;
-import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 
 public class SettingsController extends Controller {
 
@@ -50,7 +48,7 @@ public class SettingsController extends Controller {
                     appController.setGeneratorOption(GeneratorOption.INSERT);
                     break;
                 case 2:
-                    appController.setGeneratorOption(GeneratorOption.HEAP);
+                    appController.setGeneratorOption(GeneratorOption.SWAP);
                     break;
             }
             appController.run();

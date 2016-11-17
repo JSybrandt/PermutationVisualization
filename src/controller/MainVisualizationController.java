@@ -27,7 +27,7 @@ import static util.FactorialMath.factorial;
 /**
  * Created by jsybran on 11/6/2016.
  */
-public class PermSetController extends Controller {
+public class MainVisualizationController extends Controller {
     Pane visualizationPane;
     Pane selectionPane;
     ApplicationController parentController;
@@ -38,7 +38,7 @@ public class PermSetController extends Controller {
     final Color INV_COLOR = Color.BLUE;
     private List<Permutation> data;
     private List<Circle> markers = new ArrayList<>();
-    public PermSetController(Pane visualizationPane, Pane selectionPane, ApplicationController parent) {
+    public MainVisualizationController(Pane visualizationPane, Pane selectionPane, ApplicationController parent) {
         super(visualizationPane);
         this.visualizationPane = visualizationPane;
         this.parentController = parent;
