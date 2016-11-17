@@ -101,7 +101,6 @@ public class ApplicationController extends Controller{
 
     private void attachControllers(){
         settingsController = new SettingsController(settingsPane,this);
-        settingsController.run();
         permDetailController = new PermDetailController(tabDetailPane);
         permDetailController.run();
         visualizationController = new PermSetController(mainVis,selectionPane,this);
@@ -135,6 +134,10 @@ public class ApplicationController extends Controller{
         permDetailController.setPermutation(perm);
         braidController.setSelectedPerm(perm);
         visualizationController.selectPermutation(perm);
+    }
+
+    public void launchHelp(){
+        settingsController.lauchHelp();
     }
 
 }

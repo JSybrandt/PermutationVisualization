@@ -17,6 +17,7 @@
 package controller;
 
 import controller.option.GeneratorOption;
+import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
@@ -60,12 +61,14 @@ public class SettingsController extends Controller {
         Button helpButton = new Button();
         helpController = new HelpWindowController(helpButton);
         settingsPane.getChildren().add(helpButton);
-        helpController.run();
+
     }
 
     @Override
     public void run() {
-
     }
 
+    public void lauchHelp(){
+        helpController.run();
+    }
 }

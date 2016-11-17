@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -45,6 +46,7 @@ public class HelpWindowController extends Controller {
 
     @Override
     public void run() {
+        helpButton.fire();
     }
 
     private List<String> generateHelpImages(){
@@ -66,7 +68,6 @@ public class HelpWindowController extends Controller {
             currImage = helpImages.size() - 1;
         }
         else {
-            System.out.println("Display:" + helpImages.get(currImage));
             imgView.setImage(new Image(helpImages.get(currImage)));
             imgView.setFitHeight(716);
             imgView.setFitWidth(1131);
@@ -80,9 +81,13 @@ public class HelpWindowController extends Controller {
         BorderPane npPane = new BorderPane();
         Button nextButton = new Button("Next");
         Button prevButton = new Button("Prev");
+        nextButton.setFont(new Font(24));
+        prevButton.setFont(new Font(24));
+        imgTitle.setFont(new Font(24));
         npPane.setLeft(prevButton);
         npPane.setRight(nextButton);
         npPane.setCenter(imgTitle);
+        npPane.setStyle("-fx-border-color: black");
         pane.setTop(npPane);
         nextButton.setOnAction(event->{
             currImage++;

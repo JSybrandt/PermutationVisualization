@@ -47,6 +47,7 @@ public class Main extends Application{
         stage.setMaximized(true);
 
         stage.show();
+        mainAppController.launchHelp();
     }
 
     public static void main(String[] args) {
