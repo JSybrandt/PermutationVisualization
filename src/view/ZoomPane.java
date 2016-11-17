@@ -64,11 +64,6 @@ public class ZoomPane extends Pane {
             }
         });
 
-        setOnKeyReleased(keyEvent -> {
-            if(keyEvent.getCharacter().equals("r"))
-                reset();
-        });
-
     }
 
     private void zoom(double zoomDelta){
