@@ -221,9 +221,10 @@ public class PermSetController extends Controller {
     private Shape placePermNode(Vec2 loc, Permutation perm){
         Circle shape = new Circle(0,0,PERM_ICON_RADIUS,getFactoradicColor(perm));
         shape.setOnMousePressed(event -> {if(event.isPrimaryButtonDown()){parentController.setSelectedPerm(perm);}});
-        visualizationPane.getChildren().add(shape);
         shape.setLayoutX(loc.X());
         shape.setLayoutY(loc.Y());
+        visualizationPane.getChildren().add(shape);
+
         Tooltip tooltip = new Tooltip(perm.toString());
         Tooltip.install(shape,tooltip);
         placePermLabel(shape, perm);
