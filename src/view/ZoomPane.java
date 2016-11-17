@@ -1,6 +1,7 @@
 package view;
 
 import javafx.collections.ListChangeListener;
+import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
@@ -8,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import util.Vec2;
 
 public class ZoomPane extends Pane {
@@ -25,6 +27,20 @@ public class ZoomPane extends Pane {
         setOnScroll(scrollEvent -> {
             double zoomDelta = scrollEvent.getDeltaY()/400;
             zoom(zoomDelta);
+            getChildren().addListener(new ListChangeListener<Node>() {
+                @Override
+                public void onChanged(Change<? extends Node> c) {
+                    c.next();
+                    if(c.wasAdded()) {
+                        for (Node node : c.getAddedSubList()) {
+                            if(!node.visibleProperty().isBound()) {
+                                boolean vis = getLayoutBounds().contains(node.getBoundsInParent());
+                                node.setVisible(vis && node.isVisible());
+                            }
+                        }
+                    }
+                }
+            });
         });
 
 
@@ -53,16 +69,9 @@ public class ZoomPane extends Pane {
                 reset();
         });
 
-        getChildren().addListener(new ListChangeListener<Node>() {
-            @Override
-            public void onChanged(Change<? extends Node> c) {
-
-            }
-        });
     }
 
     private void zoom(double zoomDelta){
-        System.out.println(zoomDelta);
         double newZoom = Math.min(Math.max(zoomFactor + zoomDelta, MIN_ZOOM), MAX_ZOOM);
         double zoomFactorStep = newZoom / zoomFactor;
         zoomFactor = newZoom;
@@ -100,6 +109,18 @@ public class ZoomPane extends Pane {
     }
 
     private void showOnlyOnScreenNodes(){
+
+        Bounds bounds = getLayoutBounds();
+        for(Node node : getChildren()){
+            if(!node.visibleProperty().isBound()) {
+                if (bounds.contains(node.getBoundsInParent())) {
+                    node.setVisible(true);
+                } else {
+                    node.setVisible(false);
+                }
+            }
+        }
+
         /*
         for(Node node : getChildren()){
             Vec2 absPos = new Vec2(node.getTranslateX() + node.getLayoutX(), node.getTranslateY() + node.getLayoutY());
@@ -110,9 +131,10 @@ public class ZoomPane extends Pane {
         */
     }
 
-    private void reset(){
-        zoom(zoomFactor-MIN_ZOOM);
-        pan(viewPaneLocation.scale(-1));
+    public void reset(){
+        getChildren().clear();
+        zoomFactor = MIN_ZOOM;
+        viewPaneLocation = new Vec2(0,0);
     }
 
     private Vec2 getScreenCenter(){
@@ -139,6 +161,6 @@ public class ZoomPane extends Pane {
     }
 
     private boolean isManipulatable(Node node){
-        return !(node.layoutXProperty().isBound() || node.layoutYProperty().isBound());
+        return !(node instanceof Line) && !(node.layoutXProperty().isBound() || node.layoutYProperty().isBound());
     }
 }

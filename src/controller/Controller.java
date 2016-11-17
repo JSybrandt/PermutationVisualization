@@ -24,27 +24,11 @@ import javafx.scene.input.ScrollEvent;
 
 public abstract class Controller {
 
+    protected Node thisNode;
     public Controller(Node node){
-        registerCallbacks(node);
+        thisNode = node;
     }
 
-    public void registerCallbacks(Node node){
-        node.setOnMouseClicked(this::onViewMouseClicked);
-        node.setOnKeyPressed(this::onViewKeyPressed);
-        node.setOnKeyReleased(this::onViewKeyReleased);
-        node.setOnMouseMoved(this::onViewMouseMoved);
-        //node.setOnScroll(this::onViewScroll);
-    }
-
-    public void onViewMouseClicked(MouseEvent event){}
-
-    public void onViewKeyPressed(KeyEvent event){}
-
-    public void onViewKeyReleased(KeyEvent event){}
-
-    public void onViewMouseMoved(MouseEvent event){}
-
-    public void onViewScroll(ScrollEvent event){}
 
     public abstract void run();
 

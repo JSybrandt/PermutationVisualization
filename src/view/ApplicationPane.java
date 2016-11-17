@@ -22,17 +22,16 @@ public class ApplicationPane extends BorderPane {
 
     private HBox settingPane;
     private TabDetailPane tabDetailPane;
-    private Pane mainVisualization;
+    private ZoomPane mainVisualization;
     private Pane selectionPane;
-    private ZoomPane braidVisualization;
+    private Pane braidVisualization;
     public ApplicationPane(){
         tabDetailPane = new TabDetailPane();
         settingPane = new HBox();
         mainVisualization = new ZoomPane();
         selectionPane = new Pane();
         selectionPane.mouseTransparentProperty().set(true);
-        braidVisualization = new ZoomPane();
-        braidVisualization.setHorizontalMotion(false);
+        braidVisualization = new Pane();
         braidVisualization.setMinWidth(100);
         StackPane stack = new StackPane();
         stack.getChildren().add(mainVisualization);
@@ -46,7 +45,15 @@ public class ApplicationPane extends BorderPane {
         setTop(settingPane);
         setRight(tabDetailPane);
         setCenter(stack);
-        setLeft(braidVisualization);
+        ScrollPane sp = new ScrollPane(braidVisualization);
+        sp.setFitToWidth(true);
+        sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        sp.setPrefWidth(150);
+        sp.setMinWidth(150);
+        sp.setMaxWidth(150);
+        sp.setFocusTraversable(false);
+        setLeft(sp);
     }
 
     public HBox getSettingPane(){return settingPane;}
@@ -55,7 +62,7 @@ public class ApplicationPane extends BorderPane {
         return tabDetailPane;
     }
 
-    public Pane getMainVisualization() {
+    public ZoomPane getMainVisualization() {
         return mainVisualization;
     }
 
@@ -63,5 +70,18 @@ public class ApplicationPane extends BorderPane {
 
     public Pane getBraidVisualization(){
         return braidVisualization;
+    }
+
+    public void showBraid(){
+        if(getLeft() == null) {
+            setLeft(braidVisualization);
+            braidVisualization.setVisible(true);
+        }
+    }
+    public void hideBraid(){
+        if(getLeft() != null) {
+            setLeft(null);
+            braidVisualization.setVisible(false);
+        }
     }
 }

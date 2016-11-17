@@ -24,6 +24,8 @@ import view.ApplicationPane;
 import view.TabDetailPane;
 import view.ZoomPane;
 
+import java.util.List;
+
 public class ApplicationController extends Controller{
 
     private ApplicationPane appPane;
@@ -34,7 +36,7 @@ public class ApplicationController extends Controller{
     private TabDetailPane tabDetailPane;
     private PermDetailController permDetailController;
 
-    private Pane mainVis;
+    private ZoomPane mainVis;
     private Pane selectionPane;
     private PermSetController visualizationController;
 
@@ -43,6 +45,10 @@ public class ApplicationController extends Controller{
 
     private int permutationLength;
     private GeneratorOption generatorOption;
+
+    private Permutation selectedPermutation;
+
+    private List<Permutation> data;
 
     public ApplicationController(ApplicationPane root){
         super(root);
@@ -54,6 +60,7 @@ public class ApplicationController extends Controller{
     @Override
     public void run(){
         if(generatorOption != null && permutationLength > 0) {
+            mainVis.reset();
             PermutationGenerator gen;
             switch (generatorOption) {
                 case FACTORADIC:
@@ -68,11 +75,18 @@ public class ApplicationController extends Controller{
                 default:
                     gen = new FactoradicGenerator(permutationLength);
             }
+
+
+            if(permutationLength < 6) {
+                appPane.showBraid();
+                braidController.setPermLength(permutationLength);
+                braidController.run();
+            } else{
+                appPane.hideBraid();
+            }
+
             visualizationController.setGenerator(gen);
             visualizationController.run();
-
-            braidController.setPermLength(permutationLength);
-            braidController.run();
         }
     }
 
@@ -92,6 +106,11 @@ public class ApplicationController extends Controller{
         permDetailController.run();
         visualizationController = new PermSetController(mainVis,selectionPane,this);
         braidController = new BraidController(braidVis,this);
+        appPane.setOnKeyReleased(event -> {
+            if(braidVis.isVisible())
+                braidController.keyTypedHandler(event);
+            visualizationController.keyTypedHandler(event);
+        });
     }
 
     public PermDetailController getPermDetailController(){
@@ -107,7 +126,12 @@ public class ApplicationController extends Controller{
         generatorOption = opt;
     }
 
+    public Permutation getSelectedPerm(){
+        return selectedPermutation;
+    }
+
     public void setSelectedPerm(Permutation perm){
+        selectedPermutation = perm;
         permDetailController.setPermutation(perm);
         braidController.setSelectedPerm(perm);
         visualizationController.selectPermutation(perm);

@@ -32,17 +32,18 @@ public class Main extends Application{
         BorderPane root = new BorderPane();
 
         ApplicationPane mainAppPane = new ApplicationPane();
+        root.setCenter(mainAppPane);
+        Scene scene = new Scene(root);
         ApplicationController mainAppController = new ApplicationController(mainAppPane);
         mainAppController.setGeneratorOption(GeneratorOption.INSERT);
         mainAppController.setPermutationLength(4);
         mainAppController.run();
-        root.setCenter(mainAppPane);
-        Scene scene = new Scene(root);
+
         stage.setTitle("Permutation Visualization");
         stage.setHeight(300);
         stage.setWidth(300);
         stage.setScene(scene);
-        //stage.setFullScreen(true);
+        stage.setFullScreen(true);
 
         stage.show();
     }

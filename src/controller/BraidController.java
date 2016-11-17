@@ -2,6 +2,8 @@ package controller;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -45,54 +47,53 @@ public class BraidController extends Controller {
         visPane.getChildren().clear();
         selections.clear();
 
-        if(permLength > 0 && permLength <= 5){
 
-            double width = effectiveWidth();
-            double height = visPane.getHeight();
+        double width = effectiveWidth();
+        double height = visPane.getHeight();
 
-            SwapGenerator gen = new SwapGenerator(permLength);
-            data = gen.generate();
-            ArrayList<Color> valueColors = new ArrayList<>();
-            double rowHeight = rowHeight();
-            double valueWidth = width / (permLength - 1);
-            for(int i = 0; i < permLength; i++){
-                valueColors.add(Color.hsb(i*(360.0/(permLength+1)),1,1));
-                Circle selection = new Circle(DOT_RADIUS,valueColors.get(i));
-                selections.add(selection);
-            }
-
-            for(int permIndex = 1; permIndex < data.size(); permIndex++){
-                Permutation upper = data.get(permIndex-1);
-                Permutation current = data.get(permIndex);
-                double startY = rowHeight * (permIndex-1);
-                double endY = rowHeight * permIndex;
-                for(int valueIndex = 1 ; valueIndex <= permLength; valueIndex++){
-                    double startX = valueWidth * upper.getIndexOf(valueIndex) + marginSize();
-                    double endX = valueWidth * current.getIndexOf(valueIndex) + marginSize();
-                    Color lineColor = valueColors.get(valueIndex-1);
-                    //used for zoom pane achors
-                    Circle startNode = new Circle(0,0,0, lineColor);
-                    Circle endNode = new Circle(0,0,0, Color.color(1,0,0,0));
-                    startNode.setLayoutX(startX);
-                    startNode.setLayoutY(startY);
-                    endNode.setLayoutX(endX);
-                    endNode.setLayoutY(endY);
-                    Line line = new Line();
-                    line.startXProperty().bind(startNode.layoutXProperty());
-                    line.startYProperty().bind(startNode.layoutYProperty());
-                    line.endXProperty().bind(endNode.layoutXProperty());
-                    line.endYProperty().bind(endNode.layoutYProperty());
-                    line.setStroke(lineColor);
-                    line.setFill(lineColor);
-                    line.setStrokeWidth(2);
-                    visPane.getChildren().add(startNode);
-                    visPane.getChildren().add(endNode);
-                    visPane.getChildren().add(line);
-                }
-                addSelector(rowHeight,startY,current);
-            }
-            addSelector(rowHeight,-rowHeight/2,data.get(0));
+        SwapGenerator gen = new SwapGenerator(permLength);
+        data = gen.generate();
+        ArrayList<Color> valueColors = new ArrayList<>();
+        double rowHeight = rowHeight();
+        double valueWidth = width / (permLength - 1);
+        for(int i = 0; i < permLength; i++){
+            valueColors.add(Color.hsb(i*(360.0/(permLength+1)),1,1));
+            Circle selection = new Circle(DOT_RADIUS,valueColors.get(i));
+            selections.add(selection);
         }
+
+        for(int permIndex = 1; permIndex < data.size(); permIndex++){
+            Permutation upper = data.get(permIndex-1);
+            Permutation current = data.get(permIndex);
+            double startY = rowHeight * (permIndex-1) + marginSize();
+            double endY = startY + rowHeight;
+            for(int valueIndex = 1 ; valueIndex <= permLength; valueIndex++){
+                double startX = valueWidth * upper.getIndexOf(valueIndex) + marginSize();
+                double endX = valueWidth * current.getIndexOf(valueIndex) + marginSize();
+                Color lineColor = valueColors.get(valueIndex-1);
+                //used for zoom pane achors
+                Circle startNode = new Circle(0,0,0, lineColor);
+                Circle endNode = new Circle(0,0,0, Color.color(1,0,0,0));
+                startNode.setLayoutX(startX);
+                startNode.setLayoutY(startY);
+                endNode.setLayoutX(endX);
+                endNode.setLayoutY(endY);
+                Line line = new Line();
+                line.startXProperty().bind(startNode.layoutXProperty());
+                line.startYProperty().bind(startNode.layoutYProperty());
+                line.endXProperty().bind(endNode.layoutXProperty());
+                line.endYProperty().bind(endNode.layoutYProperty());
+                line.setStroke(lineColor);
+                line.setFill(lineColor);
+                line.setStrokeWidth(2);
+                visPane.getChildren().add(startNode);
+                visPane.getChildren().add(endNode);
+                visPane.getChildren().add(line);
+            }
+            addSelector(rowHeight,startY,current);
+        }
+        addSelector(rowHeight,marginSize()-rowHeight,data.get(0));
+
     }
 
     private void addSelector(double rowHeight, double startY, Permutation perm){
@@ -137,7 +138,19 @@ public class BraidController extends Controller {
         return (visPane.getWidth() - effectiveWidth()) / 2;
     }
     private double rowHeight(){
-        return visPane.getHeight() / (data.size()-1);
+        return 50;//Math.max(visPane.getHeight() / (data.size()-1),30);
+    }
+
+    public void keyTypedHandler(KeyEvent event){
+        if(parent.getSelectedPerm() != null && data != null && data.size() > 0) {
+            int permIndex = data.indexOf(parent.getSelectedPerm());
+            if (event.getCode() == KeyCode.UP && permIndex > 0) {
+                permIndex--;
+            } else if (event.getCode() == KeyCode.DOWN && permIndex < data.size() - 1) {
+                permIndex++;
+            }
+            parent.setSelectedPerm(data.get(permIndex));
+        }
     }
 
 }

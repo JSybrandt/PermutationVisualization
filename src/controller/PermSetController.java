@@ -1,10 +1,14 @@
 package controller;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Binding;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -32,6 +36,8 @@ public class PermSetController extends Controller {
     final double SELECTION_DOT_RADIUS = 6;
     Map<Permutation, Shape> perm2Shape;
     final Color INV_COLOR = Color.BLUE;
+    private List<Permutation> data;
+    private List<Circle> markers = new ArrayList<>();
     public PermSetController(Pane visualizationPane, Pane selectionPane, ApplicationController parent) {
         super(visualizationPane);
         this.visualizationPane = visualizationPane;
@@ -42,7 +48,11 @@ public class PermSetController extends Controller {
     }
 
     public void resize(){
-        visualizationPane.getChildren().clear();
+        Bounds bounds = visualizationPane.getLayoutBounds();
+        for(Node node : visualizationPane.getChildren()){
+            if(!node.visibleProperty().isBound())
+                node.setVisible(bounds.contains(node.getBoundsInParent()));
+        }
     }
 
     public void setGenerator(PermutationGenerator generator) {
@@ -56,7 +66,7 @@ public class PermSetController extends Controller {
         visualizationPane.getChildren().clear();
         selectionPane.getChildren().clear();
         perm2Shape = new HashMap<>();
-        List<Permutation> data = generator.generate();
+        data = generator.generate();
         if(generator.getPermutationSize() <= 4){
             displaySmall(data);
         }else if (generator.getPermutationSize() <= 5){
@@ -69,6 +79,7 @@ public class PermSetController extends Controller {
                                   }
                               });
         }
+        parentController.setSelectedPerm(data.get(0));
     }
 
     //graph
@@ -94,7 +105,7 @@ public class PermSetController extends Controller {
             for(Permutation target : neighbors.get(source)){
                 Shape sLoc = perm2Shape.get(source);
                 Shape tLoc = perm2Shape.get(target);
-                Line line = new Line();
+                Line line = new Line(0,0,0,0);
                 line.startXProperty().bind(sLoc.layoutXProperty());
                 line.startYProperty().bind(sLoc.layoutYProperty());
                 line.endXProperty().bind(tLoc.layoutXProperty());
@@ -105,7 +116,7 @@ public class PermSetController extends Controller {
             Permutation target = source.getInverse();
             Shape sLoc = perm2Shape.get(source);
             Shape tLoc = perm2Shape.get(target);
-            Line line = new Line();
+            Line line = new Line(0,0,0,0);
             line.startXProperty().bind(sLoc.layoutXProperty());
             line.startYProperty().bind(sLoc.layoutYProperty());
             line.endXProperty().bind(tLoc.layoutXProperty());
@@ -118,26 +129,38 @@ public class PermSetController extends Controller {
 
     }
     private void displayMed(List<Permutation> data){
-        displaySmall(data);
-        boolean pushOut = false;
+        Map<Permutation,Vec2> locs = new HashMap<>();
+        Map<Permutation, List<Permutation>> neighbors = new HashMap<>();
+        double angle = 0;
+        double angleDiff = (Math.PI * 2) / data.size();
+        double radiusSmall = Math.min(visualizationPane.getHeight(),visualizationPane.getWidth())/2.5;
+        double radiusLarge = Math.min(visualizationPane.getHeight(),visualizationPane.getWidth())/2.3;
+        Vec2 vec = new Vec2(0,1);
         Vec2 center = new Vec2(visualizationPane.getWidth()/2, visualizationPane.getHeight()/2);
-        double pushOutRadius = Math.min(visualizationPane.getHeight(),visualizationPane.getWidth())/2.2;
-        for(Node node : visualizationPane.getChildren()){
-            if(node instanceof Circle){
-                pushOut = !pushOut;
-                if(pushOut){
-                    Vec2 nodeLoc = new Vec2(node.getLayoutX(),node.getLayoutY());
-                    Vec2 diff = nodeLoc.minus(center);
-                    diff = diff.unit().scale(pushOutRadius).plus(center);
-                    node.setLayoutX(diff.X());
-                    node.setLayoutY(diff.Y());
-                }
-            }
-            if(node instanceof Line){
-                if(!((Line) node).getStroke().equals(INV_COLOR)){
-                    node.setVisible(false);
-                }
-            }
+        boolean pushOut = false;
+        for(Permutation perm : data){
+            pushOut = !pushOut;
+            neighbors.put(perm,perm.getAdjacentPerms());
+            locs.put(perm,vec.scale((pushOut?radiusLarge:radiusSmall)).rotate(angle).plus(center));
+            angle += angleDiff;
+
+        }
+        for(Permutation perm : data){
+            perm2Shape.put(perm, placePermNode(locs.get(perm),perm));
+
+        }
+        for(Permutation source : data){
+            Permutation target = source.getInverse();
+            Shape sLoc = perm2Shape.get(source);
+            Shape tLoc = perm2Shape.get(target);
+            Line line = new Line(0,0,0,0);
+            line.startXProperty().bind(sLoc.layoutXProperty());
+            line.startYProperty().bind(sLoc.layoutYProperty());
+            line.endXProperty().bind(tLoc.layoutXProperty());
+            line.endYProperty().bind(tLoc.layoutYProperty());
+            line.setStroke(INV_COLOR);
+            visualizationPane.getChildren().add(line);
+            line.toBack();
         }
     }
     //color
@@ -171,6 +194,7 @@ public class PermSetController extends Controller {
         label.setCenterShape(true);
         label.layoutXProperty().bind(s.layoutXProperty());
         label.layoutYProperty().bind(s.layoutYProperty());
+        label.visibleProperty().bind(s.visibleProperty());
         visualizationPane.getChildren().add(label);
         label.toFront();
     }
@@ -179,7 +203,7 @@ public class PermSetController extends Controller {
         Shape rect = new Rectangle(0,0, size.X(), size.Y());
         rect.setLayoutX(loc.X());
         rect.setLayoutY(loc.Y());
-        rect.setOnMousePressed(event -> parentController.setSelectedPerm(perm));
+        rect.setOnMousePressed(event -> {if(event.isPrimaryButtonDown()){parentController.setSelectedPerm(perm);}});
         rect.setFill(getFactoradicColor(perm));
         visualizationPane.getChildren().add(rect);
         Tooltip tooltip = new Tooltip(perm.toString());
@@ -195,37 +219,32 @@ public class PermSetController extends Controller {
     double initialLayoutY;
 
     private Shape placePermNode(Vec2 loc, Permutation perm){
-        Circle shape = new Circle(PERM_ICON_RADIUS,getFactoradicColor(perm));
-        shape.setOnMousePressed(event -> parentController.setSelectedPerm(perm));
+        Circle shape = new Circle(0,0,PERM_ICON_RADIUS,getFactoradicColor(perm));
+        shape.setOnMousePressed(event -> {if(event.isPrimaryButtonDown()){parentController.setSelectedPerm(perm);}});
         visualizationPane.getChildren().add(shape);
         shape.setLayoutX(loc.X());
         shape.setLayoutY(loc.Y());
         Tooltip tooltip = new Tooltip(perm.toString());
         Tooltip.install(shape,tooltip);
         placePermLabel(shape, perm);
-
-        EventHandler<MouseEvent> dragHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                shape.setLayoutX(event.getSceneX());
-                shape.setLayoutY(event.getSceneY());
-            }
-        };
+        shape.setStyle("-fx-border-color: black");
 
         shape.setOnMousePressed(event -> {
-            initialLayoutX = shape.getLayoutX();
-            initialLayoutY = shape.getLayoutY();
-            lastPressX = event.getSceneX();
-            lastPressY = event.getSceneY();
-            parentController.setSelectedPerm(perm);
+            if(event.isPrimaryButtonDown()) {
+                initialLayoutX = shape.getLayoutX();
+                initialLayoutY = shape.getLayoutY();
+                lastPressX = event.getSceneX();
+                lastPressY = event.getSceneY();
+                parentController.setSelectedPerm(perm);
+            }
         });
         shape.setOnMouseDragged(event -> {
-            double dispX = event.getSceneX() - lastPressX;
-            double dispY = event.getSceneY() - lastPressY;
-            shape.setLayoutX(initialLayoutX + dispX);
-            shape.setLayoutY(initialLayoutY + dispY);
-            //shape.setLayoutX(event.getSceneX());
-            //shape.setLayoutX(event.getSceneY());
+            if(event.isPrimaryButtonDown()) {
+                double dispX = event.getSceneX() - lastPressX;
+                double dispY = event.getSceneY() - lastPressY;
+                shape.setLayoutX(initialLayoutX + dispX);
+                shape.setLayoutY(initialLayoutY + dispY);
+            }
         });
         return shape;
     }
@@ -248,14 +267,9 @@ public class PermSetController extends Controller {
     //private List<Node> selectionObjects;
     public void selectPermutation(Permutation perm){
         selectionPane.getChildren().clear();
-        /*
-        if(selectionObjects!=null){
-            for(Node n : selectionObjects)
-                selectionPane.getChildren().remove(n);
-        } else {
-            selectionObjects = new ArrayList<>();
-        }
-        selectionObjects.clear();*/
+        if(markers.size()>100)
+            visualizationPane.getChildren().removeAll(markers);
+
         if(perm2Shape != null && perm2Shape.containsKey(perm)){
             if(prevSelection != null)
                 perm2Shape.get(prevSelection).setStrokeWidth(0);
@@ -263,13 +277,14 @@ public class PermSetController extends Controller {
             perm2Shape.get(perm).setStrokeWidth(2);
             //perm2Shape.get(perm).setFill(Color.RED);
             prevSelection = perm;
-            if(perm.getLegnth() > 5){
+            if(perm.getLegnth() >= 5){
                 Shape thisShape = perm2Shape.get(perm);
                 for(Permutation neighbor : perm.getAdjacentPerms()){
                     Shape thatShape = perm2Shape.get(neighbor);
                     connectShapes(thisShape,thatShape, Color.BLACK);
                 }
-                connectShapes(thisShape,perm2Shape.get(perm.getInverse()),Color.BLUE);
+                if(perm.getLegnth() > 5)
+                    connectShapes(thisShape,perm2Shape.get(perm.getInverse()),Color.BLUE);
             }
         }
     }
@@ -277,17 +292,67 @@ public class PermSetController extends Controller {
     private void connectShapes(Shape source, Shape target, Color color){
         double sCenterX = source.getLayoutBounds().getWidth()/2 + source.getLayoutX();
         double sCenterY = source.getLayoutBounds().getHeight()/2 + source.getLayoutY();
+
         double tCenterX = target.getLayoutBounds().getWidth()/2 + target.getLayoutX();
         double tCenterY = target.getLayoutBounds().getHeight()/2 + target.getLayoutY();
 
-        Circle targetSelector = new Circle(tCenterX,tCenterY,SELECTION_DOT_RADIUS,color);
-        Line selectorLine = new Line(sCenterX, sCenterY, tCenterX, tCenterY);
+
+        Circle markerS = new Circle(0,0,0,Color.color(0,0,0,0));
+        Circle markerT = new Circle(0,0,0,Color.color(0,0,0,0));
+        markerS.setLayoutX(sCenterX);
+        markerS.setLayoutY(sCenterY);
+        markerT.setLayoutX(tCenterX);
+        markerT.setLayoutY(tCenterY);
+
+
+
+        markers.add(markerS);
+        markers.add(markerT);
+
+        Circle targetSelector = new Circle(0,0,SELECTION_DOT_RADIUS,color);
+        targetSelector.layoutXProperty().bind(markerT.layoutXProperty());
+        targetSelector.layoutYProperty().bind(markerT.layoutYProperty());
+        Line selectorLine = new Line();
+        selectorLine.startXProperty().bind(markerS.layoutXProperty());
+        selectorLine.startYProperty().bind(markerS.layoutYProperty());
+        selectorLine.endXProperty().bind(markerT.layoutXProperty());
+        selectorLine.endYProperty().bind(markerT.layoutYProperty());
         selectorLine.setStroke(color);
+        selectorLine.visibleProperty().bind(markerT.visibleProperty());
+        targetSelector.visibleProperty().bind(markerT.visibleProperty());
         selectionPane.getChildren().add(selectorLine);
         selectionPane.getChildren().add(targetSelector);
+        visualizationPane.getChildren().add(markerS);
+        visualizationPane.getChildren().add(markerT);
+
+        //need to special case this
+        if(parentController.getSelectedPerm().getLegnth() == 5){
+            markerS.layoutXProperty().bind(source.layoutXProperty());
+            markerS.layoutYProperty().bind(source.layoutYProperty());
+            markerT.layoutXProperty().bind(target.layoutXProperty());
+            markerT.layoutYProperty().bind(target.layoutYProperty());
+            targetSelector.toBack();
+            selectorLine.toBack();
+            targetSelector.setRadius(0);
+        }
+
         //selectionObjects.add(targetSelector);
         //selectionObjects.add(selectorLine);
 
+    }
+
+    public void keyTypedHandler(KeyEvent event){
+        if(parentController.getSelectedPerm() != null) {
+            int permIndex = data.indexOf(parentController.getSelectedPerm());
+            if (event.getCode() == KeyCode.LEFT) {
+                permIndex++;
+            } else if (event.getCode() == KeyCode.RIGHT) {
+                permIndex--;
+            }
+            while(permIndex < 0) permIndex += data.size();
+            permIndex %= data.size();
+            parentController.setSelectedPerm(data.get(permIndex));
+        }
     }
 
 }
