@@ -43,7 +43,8 @@ public class Main extends Application{
         stage.setHeight(300);
         stage.setWidth(300);
         stage.setScene(scene);
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
+        stage.setMaximized(true);
 
         stage.show();
     }

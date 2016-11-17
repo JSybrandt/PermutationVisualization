@@ -3,6 +3,7 @@ package controller;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -22,6 +23,7 @@ public class HelpWindowController extends Controller {
     Button helpButton;
     int currImage =0;
     ImageView imgView = new ImageView();
+    Label imgTitle = new Label();
 
     public HelpWindowController(Button helpButton) {
         super(helpButton);
@@ -47,12 +49,12 @@ public class HelpWindowController extends Controller {
 
     private List<String> generateHelpImages(){
         ArrayList<String> res = new ArrayList<>();
-        //res.add("helpgifs/Untitled.png");
-        res.add("helpgifs/advancedSelection.gif");
-        //res.add("helpgifs/changePermSize.gif");
-        res.add("helpgifs/generatorDescription.gif");
-        res.add("helpgifs/pan&zoom.gif");
+
         res.add("helpgifs/select_click&drag.gif");
+        res.add("helpgifs/advancedSelection.gif");
+        res.add("helpgifs/pan&zoom.gif");
+        res.add("helpgifs/generatorDescription.gif");
+        res.add("helpgifs/changePermSize.gif");
         return res;
     }
 
@@ -66,8 +68,9 @@ public class HelpWindowController extends Controller {
         else {
             System.out.println("Display:" + helpImages.get(currImage));
             imgView.setImage(new Image(helpImages.get(currImage)));
-            imgView.setFitHeight(500);
-            imgView.setFitWidth(600);
+            imgView.setFitHeight(716);
+            imgView.setFitWidth(1131);
+            imgTitle.setText((currImage+1) + "/" + (helpImages.size()));
         }
     }
 
@@ -79,6 +82,7 @@ public class HelpWindowController extends Controller {
         Button prevButton = new Button("Prev");
         npPane.setLeft(prevButton);
         npPane.setRight(nextButton);
+        npPane.setCenter(imgTitle);
         pane.setTop(npPane);
         nextButton.setOnAction(event->{
             currImage++;
