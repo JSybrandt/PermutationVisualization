@@ -1,13 +1,8 @@
 package model;
 
-import com.sun.deploy.util.ArrayUtil;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
-
-import static util.FactorialMath.factorial;
 
 /*
 Justin Sybrandt

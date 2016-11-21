@@ -17,7 +17,10 @@ import model.Permutation;
 import model.PermutationGenerator;
 import util.Vec2;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static util.FactorialMath.factorial;
 

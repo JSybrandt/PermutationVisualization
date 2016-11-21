@@ -2,14 +2,12 @@ package view;
 
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Bounds;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import util.Vec2;
 
 public class ZoomPane extends Pane {

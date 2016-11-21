@@ -7,6 +7,7 @@ import model.*;
 import view.ApplicationPane;
 import view.DetailPane;
 import view.ZoomPane;
+
 import java.util.List;
 
 

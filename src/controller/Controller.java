@@ -3,9 +3,6 @@
 package controller;
 
 import javafx.scene.Node;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 
 /*
 * Justin Sybrandt
