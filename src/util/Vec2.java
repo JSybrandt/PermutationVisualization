@@ -1,16 +1,11 @@
-/*
-* Justin Sybrandt
-*
-* Description:
-* This is a standard implementation of a two dimensional vector. Used to store coordinates in
-* map space as well as screen space.
-*
-* Important Values:
-*
-* */
-
 package util;
 
+/*
+Justin Sybrandt
+Description:
+This is a standard implementation of a two dimensional vector. Used to store coordinates in
+map space as well as screen space.
+*/
 public class Vec2 {
     public static double eps = 0.001;
     double x, y;

@@ -5,8 +5,14 @@ import java.util.List;
 
 import static util.FactorialMath.factorial;
 
-/**
- * Created by jsybran on 11/2/16.
+/*
+Justin Sybrandt
+
+Purpose:
+Generates permutations in factoradic order
+Uses Permutation.fromFactoradic to do this easily
+
+
  */
 public class FactoradicGenerator extends PermutationGenerator {
 

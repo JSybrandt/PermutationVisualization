@@ -1,27 +1,30 @@
 package controller;
 
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import model.Permutation;
 import model.SwapGenerator;
-import view.ApplicationPane;
-import view.ZoomPane;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by jsybran on 11/6/2016.
+/*
+
+Justin Sybrandt
+Purpose:
+    This controller creates the braid view (left side of screen) for small permutations sizes.
+
+Important Values:
+    This controller uses a regular pane as its view, and a SwapGenerator for its model.
+
+
  */
 public class BraidController extends Controller {
 
@@ -42,14 +45,13 @@ public class BraidController extends Controller {
         selections = new ArrayList<>();
     }
 
+    //calling run places braid on pane
     @Override
     public void run() {
         visPane.getChildren().clear();
         selections.clear();
 
-
         double width = effectiveWidth();
-        double height = visPane.getHeight();
 
         SwapGenerator gen = new SwapGenerator(permLength);
         data = gen.generate();
@@ -57,6 +59,7 @@ public class BraidController extends Controller {
         double rowHeight = rowHeight();
         double valueWidth = width / (permLength - 1);
         for(int i = 0; i < permLength; i++){
+            //HSB rotation used to select interesting colors
             valueColors.add(Color.hsb(i*(360.0/(permLength+1)),1,1));
             Circle selection = new Circle(DOT_RADIUS,valueColors.get(i));
             selections.add(selection);
@@ -79,6 +82,7 @@ public class BraidController extends Controller {
                 endNode.setLayoutX(endX);
                 endNode.setLayoutY(endY);
                 Line line = new Line();
+                //line bindings allow for easy resizing
                 line.startXProperty().bind(startNode.layoutXProperty());
                 line.startYProperty().bind(startNode.layoutYProperty());
                 line.endXProperty().bind(endNode.layoutXProperty());
@@ -96,6 +100,7 @@ public class BraidController extends Controller {
 
     }
 
+    //invisible rectanges added to the pane to respond to mouse clicks
     private void addSelector(double rowHeight, double startY, Permutation perm){
         Pane selector = new Pane();
         selector.resize(visPane.getWidth(), rowHeight);
@@ -113,6 +118,7 @@ public class BraidController extends Controller {
         this.permLength = permLength;
     }
 
+    //selecting the perm places colored circles in the pane
     public void setSelectedPerm(Permutation perm){
         if(perm != null && data != null && data.contains(perm)) {
             for(Shape s : selections) {
@@ -130,6 +136,7 @@ public class BraidController extends Controller {
         }
     }
 
+    //prettier with margins
     private double effectiveWidth(){
         //allows for effective margin
         return visPane.getWidth()*0.8;
@@ -138,9 +145,10 @@ public class BraidController extends Controller {
         return (visPane.getWidth() - effectiveWidth()) / 2;
     }
     private double rowHeight(){
-        return 50;//Math.max(visPane.getHeight() / (data.size()-1),30);
+        return 50;// Math.max(visPane.getHeight() / (data.size()-1),30);
     }
 
+    //respond to up and down, should select prev/next permutation
     public void keyTypedHandler(KeyEvent event){
         if(parent.getSelectedPerm() != null && data != null && data.size() > 0) {
             int permIndex = data.indexOf(parent.getSelectedPerm());

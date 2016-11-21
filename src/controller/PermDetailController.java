@@ -4,13 +4,21 @@ import controller.option.PermVisOption;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import model.Permutation;
-import view.TabDetailPane;
+import view.DetailPane;
 
-/**
- * Created by jsybran on 11/5/2016.
+/*
+Justin Sybrandt
+
+Purpose:
+The perm detail controller shows information on the right side for a specific permutation
+This controller contacts the PermGraphicController to draw grid and graph on right side.
+
+Important Values:
+matrixController
+graphController
  */
 public class PermDetailController extends Controller {
-    TabDetailPane tabDetailPane;
+    DetailPane detailPane;
     Permutation permutation;
     Canvas matrixCanvas;
     Canvas graphCanvas;
@@ -21,9 +29,9 @@ public class PermDetailController extends Controller {
     Label permCycle;
     Label permFactoradic;
 
-    public PermDetailController(TabDetailPane tabDetailPane) {
-        super(tabDetailPane);
-        this.tabDetailPane = tabDetailPane;
+    public PermDetailController(DetailPane detailPane) {
+        super(detailPane);
+        this.detailPane = detailPane;
         matrixCanvas = new Canvas(200,200);
         graphCanvas = new Canvas(200,200);
         matrixController = new PermGraphicController(matrixCanvas);
@@ -32,11 +40,11 @@ public class PermDetailController extends Controller {
 
     @Override
     public void run() {
-        tabDetailPane.addTab("Matrix").getChildren().add(matrixCanvas);
-        tabDetailPane.addTab("Graph").getChildren().add(graphCanvas);
-        permValue = tabDetailPane.addDetail("Permutation");
-        permCycle = tabDetailPane.addDetail("Cyclic Notation");
-        permFactoradic = tabDetailPane.addDetail("Factoradic Number");
+        detailPane.addMainDetail("Matrix").getChildren().add(matrixCanvas);
+        detailPane.addMainDetail("Graph").getChildren().add(graphCanvas);
+        permValue = detailPane.addMinorDetail("Permutation");
+        permCycle = detailPane.addMinorDetail("Cyclic Notation");
+        permFactoradic = detailPane.addMinorDetail("Factoradic Number");
     }
 
     public void setPermutation(Permutation permutation){

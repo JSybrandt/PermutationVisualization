@@ -3,8 +3,11 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by jsybran on 11/3/2016.
+/*
+Justin Sybrandt
+
+Purpose:
+Generates perumtation using Heap's algorithm by swapping values iteravly
  */
 public class SwapGenerator extends PermutationGenerator {
     public SwapGenerator(int size) {
@@ -19,6 +22,7 @@ public class SwapGenerator extends PermutationGenerator {
         return generationHelper(permutationSize, initData);
     }
 
+    //recursive helper function used to generate swaps
     private List<Permutation> generationHelper(int n, int[] data){
         if(n == 1) {
             List<Permutation> res = new ArrayList<>();

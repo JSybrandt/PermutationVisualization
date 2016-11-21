@@ -1,17 +1,30 @@
 package model;
 
-import javafx.util.Pair;
-
 import java.util.*;
 
 import static util.FactorialMath.factorial;
 
+/*
+Justin Sybrandt
+
+Purpose:
+This stores permutation data and makes permutation logic easy.
+Written to make permutation objects lightweight and immutable
+Permutation manipulations instead generate more permutation elements
+
+Important Values:
+Data - an array with permutation elements in order
+fromFactoradic - makes a permutation given a size and factoradic number
+toFactoradic - gets Factoradic number from permutation
+getInversionVecFromFact - gets a series of inversions corresponding to a factoradic number
+ */
 public class Permutation {
 
     private int[] data;
     public int getLegnth(){return data.length;}
     public int get(int index){return data[index];}
 
+    //alternate constructor (named differently to not conflict with
     public static Permutation fromFactoradic(int factoradicNumber, int size){
         int[] code = getInversionVecFromFact(factoradicNumber,size);
         List<Integer> tempData = new LinkedList<>();
@@ -34,6 +47,7 @@ public class Permutation {
         return result;
     }
 
+    //returns the inversion vector corresponding to a particular factoradic number
     public static int[] getInversionVecFromFact(int val, int size){
         int[] code = new int[size];
         for(int radixBase = 1; radixBase <= size; radixBase++){
@@ -43,6 +57,8 @@ public class Permutation {
         return code;
     }
 
+    //returns inversion vector corresponding to this permutation
+    //runs left-right comparing out of order pairs
     public int[] getInversionVector(){
         //defaults to 0
         int[] code = new int[data.length];
@@ -73,6 +89,7 @@ public class Permutation {
         return true;
     }
 
+    //these constructors make testing really really easy
     public Permutation(int a){this(new int[]{a});}
     public Permutation(int a, int b){this(new int[]{a,b});}
     public Permutation(int a, int b, int c){this(new int[]{a,b,c});}
@@ -80,6 +97,8 @@ public class Permutation {
     public Permutation(int a, int b, int c, int d, int e){this(new int[]{a,b,c,d,e});}
     public Permutation(int a, int b, int c, int d, int e, int f){this(new int[]{a,b,c,d,e,f});}
     public Permutation(int a, int b, int c, int d, int e, int f, int g){this(new int[]{a,b,c,d,e,f,g});}
+
+    //main contstuctor
     public Permutation(int[] data){
         if(isPermutation(data)){
             this.data = Arrays.copyOf(data,data.length);
@@ -88,7 +107,7 @@ public class Permutation {
             throw new IllegalArgumentException("Data provided is not a permutation.");
     }
 
-
+    //used for printing
     private String arrayToString(int[] arr){
         String res = "";
         for(int val : arr){
@@ -105,6 +124,7 @@ public class Permutation {
         return new Permutation(newData);
     }
 
+    //generates a cycle graph, shows how data changed from identity
     public Map<Integer,Integer> toGraph(){
       Map<Integer,Integer> graph = new HashMap<>();
         for(int i = 1; i <= data.length; i++){
@@ -115,8 +135,13 @@ public class Permutation {
 
     public List<List<Integer>> getCycles(){
         List<List<Integer>> cycles = new ArrayList<>();
+
         Set<Integer> seen = new HashSet<>();
+
+        //gets permutation graph
         Map<Integer,Integer> graph = toGraph();
+
+        //performs a DFS-like traversal looking for cycles in permutation graph
         for(int i = 1; i <= data.length; i++){
             if(!seen.contains(i)){
                 int currIndex = i;
@@ -147,6 +172,7 @@ public class Permutation {
         return res.trim();
     }
 
+    //performs elementary adjacent swaps to find all adjacent permutations
     public List<Permutation> getAdjacentPerms(){
         int[] data = this.getData();
         List<Permutation> adjPerms = new ArrayList<>();
@@ -160,6 +186,7 @@ public class Permutation {
         return adjPerms;
     }
 
+    //returns number of elements shared with the identity
     public int getNumFixed(){
         int count = 0;
         for(int i = 0 ; i < data.length; i++)

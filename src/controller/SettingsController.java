@@ -1,18 +1,4 @@
-/*
-* Justin Sybrandt
-*
-* Description:
-* The settings controller is in charge of populating the settingPane's comboboxes as well as
-* retrieving information from that pane when the user wants to add a new maze.
-*
-* The SettingsController needs a reference to the ApplicationController to alert it when the user wants
-* to add a new maze.
-*
-* Important Values:
-* ALG_OPTS - A mapping between AlgorithmOption and human readable text used for display.
-* MAZE_OPTS - A mapping between MazeOption and human readable text used for display.
-*
-* */
+
 
 package controller;
 
@@ -22,15 +8,25 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
 
+/*
+Justin Sybrandt
+
+Purpose:
+This controller is in charge of the top settings bar.
+This controller sets up the help controller
+
+Important Values:
+Constructor sets up the top bar and action callbacks
+ */
 public class SettingsController extends Controller {
 
-    HBox settingsPane;
-    HelpWindowController helpController;
+    private HelpWindowController helpController;
 
-    public SettingsController(HBox pane, ApplicationController appController) {
-        super(pane);
-        settingsPane = pane;
+    public SettingsController(HBox settingsPane, ApplicationController appController) {
+        super(settingsPane);
         Button refresh = new Button("REFRESH");
+
+        //min - 2, max - 4, default - 4
         Spinner spinner = new Spinner(2,7,4);
         ComboBox cbox = new ComboBox();
         cbox.getItems().add(0,"Factoradic Generator");
@@ -64,6 +60,7 @@ public class SettingsController extends Controller {
 
     @Override
     public void run() {
+        //do nothing, everything setup in constructor
     }
 
     public void lauchHelp(){

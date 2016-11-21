@@ -15,8 +15,16 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by jsybran on 11/11/2016.
+/*
+Justin Sybrandt
+
+Purpose:
+    This controller responds to the help button being pressed. Creates a modal dialog which shows help information.
+    This controller is used on startup as well to show the same help information.
+
+Important Values:
+    helpImages - holds paths (relative to ./src) for images in the order they should appear.
+    getModalPane - creates the graphical portion of the help images
  */
 public class HelpWindowController extends Controller {
 
@@ -60,6 +68,7 @@ public class HelpWindowController extends Controller {
         return res;
     }
 
+    //changes image displayed on imageview
     private void updateImage(){
         if(currImage < 0){
             currImage = 0;
@@ -75,6 +84,7 @@ public class HelpWindowController extends Controller {
         }
     }
 
+    //makes modal dialog. Border pane with next/prev buttons and a large image
     private Pane getModalPane(){
         BorderPane pane = new BorderPane();
         pane.setCenter(imgView);
@@ -89,6 +99,8 @@ public class HelpWindowController extends Controller {
         npPane.setCenter(imgTitle);
         npPane.setStyle("-fx-border-color: black");
         pane.setTop(npPane);
+
+        //buttons should update images
         nextButton.setOnAction(event->{
             currImage++;
             updateImage();

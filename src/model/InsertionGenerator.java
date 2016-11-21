@@ -9,8 +9,10 @@ import java.util.Stack;
 
 import static util.FactorialMath.factorial;
 
-/**
- * Created by jsybran on 11/2/16.
+/*
+Justin Sybrandt
+Purpose:
+Generates permutations by iteratively inserting different values in varying locations.
  */
 public class InsertionGenerator extends PermutationGenerator {
 
@@ -21,19 +23,30 @@ public class InsertionGenerator extends PermutationGenerator {
     @Override
     public List<Permutation> generate() {
         List<Permutation> res = new ArrayList<>();
-        LinkedList<List<Integer>> tempData = new LinkedList<>();
-        tempData.add(new ArrayList<>());
-        tempData.get(0).add(1);
-        while(!tempData.isEmpty()){
-            List<Integer> currData = tempData.pollFirst();
-            if(currData.size() == permutationSize){
-                res.add(list2Perm(currData));
-            }else if (currData.size()<permutationSize) {
-                int newVal = currData.size() + 1;
-                for(int i = 0; i <= currData.size(); i++){
-                    List<Integer> cp = deepCopy(currData);
+
+        //stored as a very mutable datastructure durring construction to make insertions easy
+        LinkedList<List<Integer>> permConstructionList = new LinkedList<>();
+        //start with empty list
+        permConstructionList.add(new ArrayList<>());
+        //adds a single 1 to initial list
+        permConstructionList.get(0).add(1);
+
+        //permConstructionList is only going to contain less than full perms
+        //this code is practically a BFS through permutation space
+        while(!permConstructionList.isEmpty()){
+
+            List<Integer> current = permConstructionList.pollFirst();
+
+            //if we have a full permutation
+            if(current.size() == permutationSize){
+                res.add(list2Perm(current));
+            }else if (current.size()<permutationSize) {
+                //add an unused element in all possible spots
+                int newVal = current.size() + 1;
+                for(int i = 0; i <= current.size(); i++){
+                    List<Integer> cp = deepCopy(current);
                     cp.add(i,newVal);
-                    tempData.add(cp);
+                    permConstructionList.add(cp);
                 }
             }
         }

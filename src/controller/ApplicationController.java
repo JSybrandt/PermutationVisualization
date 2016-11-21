@@ -1,19 +1,3 @@
-/*
-* Justin Sybrandt
-*
-* Description:
-* The application controller is responsible for initializing the views and controllers.
-* This meta controller also adds mazes to the application pane when given a maze description.
-*
-* Important Values:
-* appPane - the main view.
-* mazeController2View - stores a collection of maze controllers and views.
-*                       The map structure allows for easy storage of pairs.
-*
-*
-* */
-
-
 package controller;
 
 import controller.option.GeneratorOption;
@@ -21,10 +5,24 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import model.*;
 import view.ApplicationPane;
-import view.TabDetailPane;
+import view.DetailPane;
 import view.ZoomPane;
-
 import java.util.List;
+
+
+/*
+* Justin Sybrandt
+*
+* Description:
+* The application controller is responsible for maintaining all controllers and handling application-level data.
+* This includes selecting permutations, because those selections will effect all views.
+*
+* Important Values:
+* void setSelectedPerm(Permutation perm)
+*   this method is used by child controllers to set application-wide state regarding the permutation.
+*   When called, this method propagates the permutation selection to all interested controllers.
+* */
+
 
 public class ApplicationController extends Controller{
 
@@ -33,7 +31,7 @@ public class ApplicationController extends Controller{
     private HBox settingsPane;
     private SettingsController settingsController;
 
-    private TabDetailPane tabDetailPane;
+    private DetailPane detailPane;
     private PermDetailController permDetailController;
 
     private ZoomPane mainVis;
@@ -92,7 +90,7 @@ public class ApplicationController extends Controller{
 
     private void createViews(){
         settingsPane = appPane.getSettingPane();
-        tabDetailPane = appPane.getTabDetailPane();
+        detailPane = appPane.getDetailPane();
         mainVis = appPane.getMainVisualization();
         braidVis = appPane.getBraidVisualization();
         selectionPane = appPane.getSelectionPane();
@@ -101,7 +99,7 @@ public class ApplicationController extends Controller{
 
     private void attachControllers(){
         settingsController = new SettingsController(settingsPane,this);
-        permDetailController = new PermDetailController(tabDetailPane);
+        permDetailController = new PermDetailController(detailPane);
         permDetailController.run();
         visualizationController = new MainVisualizationController(mainVis,selectionPane,this);
         braidController = new BraidController(braidVis,this);

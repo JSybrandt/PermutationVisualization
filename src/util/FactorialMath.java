@@ -1,5 +1,12 @@
 package util;
 
+/*
+Justin Sybrandt
+
+Purpose:
+I needed a place to put a facotrial function that all classes could see.
+This is a singleton value like Math
+ */
 public class FactorialMath {
     private static FactorialMath ourInstance = new FactorialMath();
 

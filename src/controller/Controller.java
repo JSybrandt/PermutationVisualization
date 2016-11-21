@@ -1,3 +1,12 @@
+
+
+package controller;
+
+import javafx.scene.Node;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+
 /*
 * Justin Sybrandt
 *
@@ -14,14 +23,6 @@
 * node - Each controller is intended to
 *
 * */
-
-package controller;
-
-import javafx.scene.Node;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-
 public abstract class Controller {
 
     protected Node thisNode;

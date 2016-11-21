@@ -2,8 +2,11 @@ package model;
 
 import java.util.List;
 
-/**
- * Created by jsybran on 11/2/16.
+/*
+Justin Sybrandt
+
+Purpose:
+Provides a common interface for all permutation generators
  */
 public abstract class PermutationGenerator {
     public int getPermutationSize() {

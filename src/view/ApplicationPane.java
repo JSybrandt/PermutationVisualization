@@ -1,50 +1,50 @@
-/*
-* Justin Sybrandt
-*
-* Description:
-* This is the main pane. At the top is the SettingsPane, in the center is a collection of MazeContainers.
-* Controlled by the Application Controller.
-*
-* Important Values:
-* mazeContainerTilePane - stores a collection of MazeContainers and displays them based on space available.
-*
-* */
-
 package view;
 
 import javafx.geometry.Insets;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 
+/*
+Justin Sybrandt
+
+Purpose:
+This class contains the main visualization, the braid visualization, the settings pane, and the detail pane
+Allows braid visualization to be shown / hid
+ */
 public class ApplicationPane extends BorderPane {
 
     private HBox settingPane;
-    private TabDetailPane tabDetailPane;
+    private DetailPane detailPane;
     private ZoomPane mainVisualization;
     private Pane selectionPane;
     private Pane braidVisualization;
     public ApplicationPane(){
-        tabDetailPane = new TabDetailPane();
+        //set values
+        detailPane = new DetailPane();
         settingPane = new HBox();
         mainVisualization = new ZoomPane();
         selectionPane = new Pane();
         selectionPane.mouseTransparentProperty().set(true);
         braidVisualization = new Pane();
+
+        //size
         braidVisualization.setMinWidth(100);
+
+        //used to place the selection pane over the main vis
         StackPane stack = new StackPane();
         stack.getChildren().add(mainVisualization);
         stack.getChildren().add(selectionPane);
-        //stack.setStyle("-fx-border-color: black");
-        braidVisualization.setStyle("-fx-border-color: black");
-        tabDetailPane.setStyle("-fx-border-color: black");
-        selectionPane.setStyle("-fx-border-color: black");
-        tabDetailPane.setPadding(new Insets(0,5,0,5));
 
-        setTop(settingPane);
-        setRight(tabDetailPane);
-        setCenter(stack);
+        //borders made this look better
+        braidVisualization.setStyle("-fx-border-color: black");
+        detailPane.setStyle("-fx-border-color: black");
+        selectionPane.setStyle("-fx-border-color: black");
+
+        //set some padding on left-right of detail pane
+        detailPane.setPadding(new Insets(0,5,0,5));
+
+
+        //make a scrollpane to house the braid visualization
         ScrollPane sp = new ScrollPane(braidVisualization);
         sp.setFitToWidth(true);
         sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -53,13 +53,18 @@ public class ApplicationPane extends BorderPane {
         sp.setMinWidth(150);
         sp.setMaxWidth(150);
         sp.setFocusTraversable(false);
+
+        //place all panes in their respective spots
+        setTop(settingPane);
+        setRight(detailPane);
+        setCenter(stack);
         setLeft(sp);
     }
 
     public HBox getSettingPane(){return settingPane;}
 
-    public TabDetailPane getTabDetailPane() {
-        return tabDetailPane;
+    public DetailPane getDetailPane() {
+        return detailPane;
     }
 
     public ZoomPane getMainVisualization() {
